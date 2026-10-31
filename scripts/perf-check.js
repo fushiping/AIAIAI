@@ -48,6 +48,11 @@ const metrics = await page.evaluate(() => {
 });
 await page.screenshot({ path: 'test-output/performance-123mrfu.png' });
 console.log(JSON.stringify({ totalWaitMs: elapsed, ...metrics }, null, 2));
+await page.locator('#projects').scrollIntoViewIfNeeded();
+await page.waitForFunction(() => [...document.querySelectorAll('.project-card img')]
+  .every((image) => image.naturalWidth > 0));
+await page.waitForTimeout(250);
+await page.screenshot({ path: 'test-output/performance-123mrfu-projects.png' });
 await page.locator('#floatingContactButton').click();
 await page.waitForFunction(() => {
   const image = document.querySelector('#floatingContactQr');
