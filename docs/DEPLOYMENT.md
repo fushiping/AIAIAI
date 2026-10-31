@@ -1,5 +1,15 @@
 # 生产部署说明
 
+## 当前线上实例
+
+- 地址：`https://www.yijianbaowen.cn/vip/`
+- 管理后台：`https://www.yijianbaowen.cn/vip/admin/`
+- 应用目录：`/opt/fushi-ai-vip`
+- systemd 服务：`fushi-ai-vip`
+- 内部端口：`127.0.0.1:4176`
+- Nginx 子路径：`/vip/`
+- 运行数据：`/opt/fushi-ai-vip/data`、`/opt/fushi-ai-vip/storage`
+
 ## 1. 运行环境
 
 - Linux / Windows 均可

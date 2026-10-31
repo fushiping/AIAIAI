@@ -2,6 +2,12 @@
 
 面向国内 B 端访客的项目展示、资料分发与合作咨询系统。访客端与管理后台共用同一套 REST API，但入口和界面完全分离。
 
+## 在线地址
+
+- 访客端：https://www.yijianbaowen.cn/vip/
+- 管理后台：https://www.yijianbaowen.cn/vip/admin/
+- 源码仓库：https://github.com/fushiping/AIAIAI
+
 ## 已实现能力
 
 - 访客端：深蓝商务视觉、首屏内容、分类筛选、动态项目卡片、项目详情弹窗、软件/资料下载、信任保障、合作咨询、响应式布局。
