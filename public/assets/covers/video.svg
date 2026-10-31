@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#06162b"/>
+      <stop offset=".55" stop-color="#143b59"/>
+      <stop offset="1" stop-color="#123048"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#f1d99f"/>
+      <stop offset="1" stop-color="#b58532"/>
+    </linearGradient>
+    <radialGradient id="glow">
+      <stop stop-color="#c69b46" stop-opacity=".32"/>
+      <stop offset="1" stop-color="#c69b46" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <circle cx="1220" cy="390" r="460" fill="url(#glow)"/>
+  <g transform="translate(790 120)">
+    <g transform="rotate(-9 210 330)">
+      <rect x="0" y="55" width="280" height="500" rx="28" fill="#0a2138" stroke="#88b1c2" stroke-opacity=".22"/>
+      <rect x="16" y="72" width="248" height="390" rx="18" fill="#153b57"/>
+      <circle cx="140" cy="344" r="54" fill="#d8b96f" fill-opacity=".2"/>
+      <path d="M126 312l45 32-45 32z" fill="#eed89f"/>
+      <rect x="42" y="493" width="132" height="9" rx="4.5" fill="#739aac"/>
+    </g>
+    <g transform="rotate(6 420 300)">
+      <rect x="285" y="10" width="280" height="500" rx="28" fill="#102d47" stroke="#a1c5d3" stroke-opacity=".28"/>
+      <rect x="301" y="27" width="248" height="390" rx="18" fill="#1e4d66"/>
+      <circle cx="425" cy="178" r="50" fill="#e3c477" fill-opacity=".16"/>
+      <path d="M410 145l48 33-48 33z" fill="#f1dda8"/>
+      <rect x="327" y="448" width="192" height="9" rx="4.5" fill="#92b5c4"/>
+    </g>
+    <g transform="rotate(-3 680 370)">
+      <rect x="552" y="105" width="280" height="500" rx="28" fill="#0a2137" stroke="#8cafc0" stroke-opacity=".25"/>
+      <rect x="568" y="122" width="248" height="390" rx="18" fill="#123650"/>
+      <circle cx="692" cy="306" r="58" fill="#5fbfca" fill-opacity=".17"/>
+      <path d="M676 273l50 33-50 33z" fill="#7fd0d7"/>
+      <rect x="594" y="543" width="160" height="9" rx="4.5" fill="#769aaa"/>
+    </g>
+  </g>
+  <g transform="translate(120 196)">
+    <rect width="164" height="38" rx="19" fill="#d6b568" fill-opacity=".14" stroke="#d6b568" stroke-opacity=".4"/>
+    <text x="27" y="26" fill="#e5cc8d" font-family="Microsoft YaHei, sans-serif" font-size="18" letter-spacing="3">CONTENT GROWTH</text>
+    <text x="0" y="184" fill="#f5f7f9" font-family="Microsoft YaHei, sans-serif" font-size="82" font-weight="700">矩阵增长</text>
+    <text x="0" y="256" fill="#f5f7f9" font-family="Microsoft YaHei, sans-serif" font-size="54" font-weight="300">让流量变成长期资产</text>
+    <path d="M0 305h96" stroke="url(#gold)" stroke-width="5"/>
+    <text x="0" y="366" fill="#a7c2d0" font-family="Microsoft YaHei, sans-serif" font-size="25" letter-spacing="2">定位 · 生产 · 分发 · 复盘</text>
+  </g>
+</svg>

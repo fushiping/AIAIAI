@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <base href="__APP_BASE__">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b2139">
+  <meta name="robots" content="noindex,nofollow">
+  <title>运营管理｜傅先生AI项目VIP</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="page-loader" id="pageLoader" aria-label="正在载入">
+    <span class="loader-brand">F</span>
+    <span class="loader-line"><i></i></span>
+  </div>
+
+  <section class="login-screen" id="loginScreen" hidden>
+    <div class="login-brand-panel">
+      <div class="login-grid" aria-hidden="true"></div>
+      <div class="login-brand-top">
+        <span class="brand-diamond"><b>F</b></span>
+        <span><strong>傅先生AI项目VIP</strong><small>PROJECT OPERATIONS</small></span>
+      </div>
+      <div class="login-message">
+        <span>内容运营中枢</span>
+        <h1>把项目、资料与<br>每一次合作连接起来</h1>
+        <p>统一管理项目上下架、文件分发、访客数据与合作线索，让站点运营更清晰、更高效。</p>
+      </div>
+      <div class="login-metrics">
+        <div><strong>01</strong><span>项目与文件统一管理</span></div>
+        <div><strong>02</strong><span>访问与下载数据可追踪</span></div>
+        <div><strong>03</strong><span>合作线索及时响应</span></div>
+      </div>
+      <div class="login-orbit" aria-hidden="true"></div>
+    </div>
+
+    <div class="login-form-panel">
+      <div class="login-form-wrap">
+        <a class="login-public-link" href="../" target="_blank" rel="noopener">
+          <span>访问项目前台</span>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4"/></svg>
+        </a>
+        <div class="login-heading">
+          <span>ADMIN CONSOLE</span>
+          <h2>欢迎回来</h2>
+          <p>请使用管理员账号登录运营后台</p>
+        </div>
+        <form id="loginForm" novalidate>
+          <label class="admin-field">
+            <span>管理员账号</span>
+            <div class="input-with-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4.5 21c.8-4 3.3-6 7.5-6s6.7 2 7.5 6"/></svg>
+              <input type="text" name="username" autocomplete="username" placeholder="请输入管理员账号" required autofocus>
+            </div>
+          </label>
+          <label class="admin-field">
+            <span>登录密码</span>
+            <div class="input-with-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></svg>
+              <input type="password" name="password" autocomplete="current-password" placeholder="请输入登录密码" required>
+              <button class="password-toggle" type="button" id="toggleLoginPassword" aria-label="显示密码">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6Z"/><circle cx="12" cy="12" r="2.5"/></svg>
+              </button>
+            </div>
+          </label>
+          <div class="login-error" id="loginError" role="alert" hidden></div>
+          <button class="login-submit" type="submit">
+            <span class="button-label">登录管理后台</span>
+            <span class="button-loading" hidden>正在验证...</span>
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4"/></svg>
+          </button>
+        </form>
+        <p class="login-help">账号由总管理员创建。如遗忘密码，请联系系统负责人重置。</p>
+      </div>
+      <p class="login-copyright">© 2026 傅先生AI项目VIP · 运营管理系统</p>
+    </div>
+  </section>
+
+  <div class="admin-layout" id="adminApp" hidden>
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="sidebar-brand">
+        <span class="brand-diamond"><b>F</b></span>
+        <span><strong>傅先生AI项目VIP</strong><small>运营管理中心</small></span>
+      </div>
+
+      <nav class="admin-nav" id="adminNav" aria-label="后台导航">
+        <span class="nav-group-label">运营概览</span>
+        <button class="admin-nav-item" type="button" data-view="dashboard" data-permission="analytics">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          <span>工作台</span>
+        </button>
+        <button class="admin-nav-item" type="button" data-view="analytics" data-permission="analytics">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+          <span>数据统计</span>
+        </button>
+
+        <span class="nav-group-label">内容运营</span>
+        <button class="admin-nav-item" type="button" data-view="projects" data-permission="projects">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4z"/><path d="M4 10h16M9 5v5"/></svg>
+          <span>项目管理</span>
+        </button>
+        <button class="admin-nav-item" type="button" data-view="categories" data-permission="categories">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg>
+          <span>分类管理</span>
+        </button>
+        <button class="admin-nav-item" type="button" data-view="inquiries" data-permission="inquiries">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v12H9l-5 4V5Z"/><path d="M8 9h8M8 12.5h5"/></svg>
+          <span>咨询留言</span>
+          <b class="nav-badge" id="inquiryBadge" hidden>0</b>
+        </button>
+
+        <span class="nav-group-label">系统</span>
+        <button class="admin-nav-item" type="button" data-view="settings" data-permission="settings">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.6v-.2h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></svg>
+          <span>内容与设置</span>
+        </button>
+        <button class="admin-nav-item" type="button" data-view="admins" data-permission="admins">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="4"/><path d="M2.5 21c.7-4 2.9-6 6.5-6s5.8 2 6.5 6M16 4.5a4 4 0 0 1 0 7M17 15c2.7.3 4.2 2.3 4.7 5.5"/></svg>
+          <span>管理员账号</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <a class="sidebar-public-link" href="../" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+          <span>查看线上站点</span>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4"/></svg>
+        </a>
+        <div class="sidebar-user">
+          <span class="user-avatar" id="sidebarAvatar">管</span>
+          <span class="user-meta">
+            <strong id="sidebarUserName">管理员</strong>
+            <small id="sidebarUserRole">超级管理员</small>
+          </span>
+          <button class="icon-button user-menu-button" type="button" id="userMenuButton" aria-label="账号操作" aria-expanded="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
+          </button>
+          <div class="user-popover" id="userPopover" hidden>
+            <button type="button" id="openPasswordButton">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+              修改密码
+            </button>
+            <button type="button" id="logoutButton">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H4v16h6M14 8l4 4-4 4M8 12h10"/></svg>
+              退出登录
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="admin-main">
+      <header class="admin-topbar">
+        <button class="mobile-sidebar-button" type="button" id="mobileSidebarButton" aria-label="打开侧边栏">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+        <div class="topbar-heading">
+          <h1 id="viewTitle">工作台</h1>
+          <p id="viewSubtitle">查看站点运营数据与待处理事项</p>
+        </div>
+        <div class="topbar-actions">
+          <span class="system-status"><i></i> 系统运行正常</span>
+          <span class="topbar-date" id="topbarDate"></span>
+          <button class="icon-button refresh-button" type="button" id="refreshViewButton" aria-label="刷新当前页面">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6v5h-5M4 18v-5h5"/><path d="M18.5 10a7 7 0 0 0-12-3L4 11M5.5 14a7 7 0 0 0 12 3L20 13"/></svg>
+          </button>
+        </div>
+      </header>
+      <main class="admin-content" id="viewRoot">
+        <div class="content-loading"><span></span>正在加载数据...</div>
+      </main>
+    </div>
+  </div>
+
+  <dialog class="admin-dialog project-editor-dialog" id="projectEditorDialog" aria-labelledby="projectEditorTitle">
+    <form id="projectForm">
+      <div class="dialog-header">
+        <div>
+          <span class="dialog-kicker">PROJECT CONTENT</span>
+          <h2 id="projectEditorTitle">新增项目</h2>
+          <p>配置前台展示内容、项目分类与上架状态</p>
+        </div>
+        <button class="dialog-close" type="button" data-close-dialog="projectEditorDialog" aria-label="关闭">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <div class="dialog-body project-form-body">
+        <input type="hidden" name="coverUrl" id="projectCoverUrl" value="">
+        <div class="form-section">
+          <h3><b>01</b> 基础信息</h3>
+          <div class="form-grid two">
+            <label class="admin-field">
+              <span>项目名称 <b>*</b></span>
+              <input type="text" name="name" maxlength="100" placeholder="例如：智稿 AI 内容中台" required>
+            </label>
+            <label class="admin-field">
+              <span>所属分类</span>
+              <select name="categoryId" id="projectCategorySelect">
+                <option value="">未分类</option>
+              </select>
+            </label>
+          </div>
+          <label class="admin-field">
+            <span>一句话简介 <b>*</b></span>
+            <input type="text" name="slogan" maxlength="240" placeholder="用一句话说清楚项目价值" required>
+          </label>
+          <div class="form-grid three">
+            <label class="admin-field">
+              <span>项目标签 <b>*</b></span>
+              <input type="text" name="tags" placeholder="用逗号分隔，至少 2 个">
+              <small>例如：内容提效，品牌中台，可私有化</small>
+            </label>
+            <label class="admin-field">
+              <span>排序权重</span>
+              <input type="number" name="sortWeight" value="0" min="-99999" max="99999" step="1">
+              <small>数值越大，排序越靠前</small>
+            </label>
+            <label class="switch-field">
+              <span>前台展示状态</span>
+              <span class="switch-row">
+                <input type="checkbox" name="published" id="projectPublished" checked>
+                <i></i>
+                <span><strong>立即上架</strong><small>关闭后仅后台可见</small></span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3><b>02</b> 项目内容</h3>
+          <label class="admin-field">
+            <span>详细介绍 <b>*</b></span>
+            <textarea name="description" rows="7" maxlength="12000" placeholder="介绍适用场景、核心能力、交付方式和合作边界..." required></textarea>
+            <small>支持自然换行，前台会按段落展示</small>
+          </label>
+          <label class="admin-field">
+            <span>功能亮点 <b>*</b></span>
+            <textarea name="highlights" rows="4" maxlength="1200" placeholder="每行填写一个亮点，例如：&#10;多场景内容模板与品牌语气配置&#10;选题到发布的全流程协作" required></textarea>
+            <small>每行一个亮点，建议填写 3-5 项</small>
+          </label>
+        </div>
+
+        <div class="form-section">
+          <h3><b>03</b> 项目封面</h3>
+          <div class="cover-editor">
+            <div class="cover-preview" id="projectCoverPreview">
+              <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M7 9h34v30H7zM7 31l10-9 8 7 6-5 10 8"/><circle cx="32" cy="18" r="4"/></svg>
+              <span>暂无封面</span>
+            </div>
+            <div class="cover-editor-info">
+              <strong>上传项目封面</strong>
+              <p>建议尺寸 1600 × 900，支持 JPG、PNG、WEBP，不超过 5MB。清晰的深色商务封面更适合当前站点风格。</p>
+              <div class="cover-actions">
+                <label class="small-button primary">
+                  <input type="file" id="projectCoverInput" accept=".jpg,.jpeg,.png,.webp" hidden>
+                  <span>选择图片</span>
+                </label>
+                <button class="small-button" type="button" id="removeProjectCover">移除封面</button>
+              </div>
+              <span class="upload-progress" id="coverUploadProgress" hidden>正在上传封面...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="project-submit-error" id="projectSubmitError" role="alert" hidden></div>
+      <div class="dialog-footer">
+        <button class="secondary-button" type="button" data-close-dialog="projectEditorDialog">取消</button>
+        <button class="primary-button" type="submit">
+          <span class="button-label">保存项目</span>
+          <span class="button-loading" hidden>正在保存...</span>
+        </button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="admin-dialog file-manager-dialog" id="fileManagerDialog" aria-labelledby="fileManagerTitle">
+    <div class="dialog-header">
+      <div>
+        <span class="dialog-kicker">PROJECT FILES</span>
+        <h2 id="fileManagerTitle">项目文件</h2>
+        <p id="fileManagerSubtitle">管理软件安装包与资料文件</p>
+      </div>
+      <button class="dialog-close" type="button" data-close-dialog="fileManagerDialog" aria-label="关闭">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div class="dialog-body">
+      <form class="file-upload-panel" id="fileUploadForm">
+        <div class="upload-panel-heading">
+          <span class="upload-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m-4 4 4-4 4 4"/><path d="M5 20h14"/></svg>
+          </span>
+          <div><strong>上传新文件</strong><p>文件会上传到受控目录，并通过下载令牌发放</p></div>
+        </div>
+        <div class="form-grid four">
+          <label class="admin-field">
+            <span>文件类型</span>
+            <select name="type">
+              <option value="software">软件安装包</option>
+              <option value="document">项目资料</option>
+            </select>
+          </label>
+          <label class="admin-field">
+            <span>前台展示名称</span>
+            <input type="text" name="displayName" maxlength="180" placeholder="不填则使用原文件名">
+          </label>
+          <label class="admin-field file-input-field">
+            <span>选择文件</span>
+            <input type="file" name="file" required>
+          </label>
+          <button class="primary-button upload-button" type="submit">
+            <span class="button-label">上传文件</span>
+            <span class="button-loading" hidden>上传中...</span>
+          </button>
+        </div>
+        <p class="upload-limits">支持 PDF、Office、TXT、ZIP/RAR/7Z、EXE、MSI、DMG、PKG，单文件最大 200MB。</p>
+      </form>
+      <div class="file-manager-list-head">
+        <div><h3>已上传文件</h3><p id="fileTotalText">共 0 个文件</p></div>
+        <span>文件名称可直接修改</span>
+      </div>
+      <div class="admin-file-list" id="adminFileList">
+        <div class="table-empty compact">正在加载文件...</div>
+      </div>
+    </div>
+    <div class="dialog-footer">
+      <span class="dialog-footer-note">文件替换后，原下载链接自动失效。</span>
+      <button class="secondary-button" type="button" data-close-dialog="fileManagerDialog">完成</button>
+    </div>
+  </dialog>
+
+  <dialog class="admin-dialog form-dialog" id="categoryDialog" aria-labelledby="categoryDialogTitle">
+    <form id="categoryForm">
+      <div class="dialog-header">
+        <div>
+          <span class="dialog-kicker">CATEGORY</span>
+          <h2 id="categoryDialogTitle">新增分类</h2>
+          <p>分类将用于前台项目筛选与后台内容组织</p>
+        </div>
+        <button class="dialog-close" type="button" data-close-dialog="categoryDialog" aria-label="关闭">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <div class="dialog-body">
+        <input type="hidden" name="id" value="">
+        <label class="admin-field">
+          <span>分类名称 <b>*</b></span>
+          <input type="text" name="name" maxlength="40" placeholder="例如：AI 创作工具" required>
+        </label>
+        <label class="admin-field">
+          <span>分类说明</span>
+          <textarea name="description" rows="3" maxlength="160" placeholder="简要说明该分类包含的项目方向"></textarea>
+        </label>
+        <div class="form-grid two">
+          <label class="admin-field">
+            <span>显示排序</span>
+            <input type="number" name="sortOrder" value="0" min="-9999" max="9999">
+            <small>数值越大越靠前</small>
+          </label>
+          <label class="switch-field padded">
+            <span>前台显示</span>
+            <span class="switch-row">
+              <input type="checkbox" name="active" checked>
+              <i></i>
+              <span><strong>正常显示</strong><small>关闭后不展示该分类</small></span>
+            </span>
+          </label>
+        </div>
+      </div>
+      <div class="dialog-footer">
+        <button class="secondary-button" type="button" data-close-dialog="categoryDialog">取消</button>
+        <button class="primary-button" type="submit">
+          <span class="button-label">保存分类</span>
+          <span class="button-loading" hidden>正在保存...</span>
+        </button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="admin-dialog inquiry-dialog" id="inquiryDialog" aria-labelledby="inquiryDialogTitle">
+    <form id="inquiryForm">
+      <div class="dialog-header inquiry-dialog-header">
+        <div>
+          <span class="dialog-kicker">COOPERATION LEAD</span>
+          <h2 id="inquiryDialogTitle">合作咨询详情</h2>
+          <p id="inquiryTime">提交时间</p>
+        </div>
+        <button class="dialog-close" type="button" data-close-dialog="inquiryDialog" aria-label="关闭">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <div class="dialog-body">
+        <input type="hidden" name="id" value="">
+        <div class="contact-card">
+          <span class="contact-avatar" id="inquiryAvatar">客</span>
+          <div class="contact-main">
+            <h3 id="inquiryName">访客</h3>
+            <p id="inquiryCompany">未填写公司</p>
+          </div>
+          <span class="status-pill" id="inquiryStatusBadge">新留言</span>
+        </div>
+        <div class="contact-details-grid">
+          <div><span>联系电话</span><strong id="inquiryPhone">—</strong></div>
+          <div><span>微信</span><strong id="inquiryWechat">—</strong></div>
+          <div><span>意向项目</span><strong id="inquiryProject">未指定</strong></div>
+          <div><span>关注文件</span><strong id="inquiryFile">未指定</strong></div>
+        </div>
+        <div class="inquiry-message-block">
+          <span>访客需求</span>
+          <p id="inquiryMessage"></p>
+        </div>
+        <div class="form-grid two">
+          <label class="admin-field">
+            <span>处理状态</span>
+            <select name="status">
+              <option value="new">新留言</option>
+              <option value="processing">跟进中</option>
+              <option value="done">已处理</option>
+            </select>
+          </label>
+          <label class="admin-field">
+            <span>阅读状态</span>
+            <select name="isRead">
+              <option value="1">已读</option>
+              <option value="0">未读</option>
+            </select>
+          </label>
+        </div>
+        <label class="admin-field">
+          <span>内部备注</span>
+          <textarea name="adminNote" rows="4" maxlength="2000" placeholder="记录跟进结果、下次联系时间等，仅后台可见"></textarea>
+        </label>
+      </div>
+      <div class="dialog-footer split-footer">
+        <button class="danger-text-button" type="button" id="deleteInquiryButton">删除记录</button>
+        <div>
+          <button class="secondary-button" type="button" data-close-dialog="inquiryDialog">关闭</button>
+          <button class="primary-button" type="submit">保存处理状态</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="admin-dialog form-dialog" id="adminDialog" aria-labelledby="adminDialogTitle">
+    <form id="adminForm">
+      <div class="dialog-header">
+        <div>
+          <span class="dialog-kicker">TEAM ACCESS</span>
+          <h2 id="adminDialogTitle">新增子管理员</h2>
+          <p>分配必要的操作权限，遵循最小权限原则</p>
+        </div>
+        <button class="dialog-close" type="button" data-close-dialog="adminDialog" aria-label="关闭">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <div class="dialog-body">
+        <input type="hidden" name="id" value="">
+        <div class="form-grid two">
+          <label class="admin-field">
+            <span>登录账号 <b>*</b></span>
+            <input type="text" name="username" maxlength="40" pattern="[A-Za-z0-9_.-]{3,40}" placeholder="字母、数字、点或下划线" required>
+          </label>
+          <label class="admin-field">
+            <span>管理员姓名 <b>*</b></span>
+            <input type="text" name="displayName" maxlength="60" placeholder="例如：运营小李" required>
+          </label>
+        </div>
+        <label class="admin-field">
+          <span id="adminPasswordLabel">初始密码 <b>*</b></span>
+          <input type="password" name="password" minlength="8" autocomplete="new-password" placeholder="至少 8 位，需包含字母和数字">
+          <small id="adminPasswordHint">子管理员首次登录后应修改密码</small>
+        </label>
+        <div class="permissions-field">
+          <span>可操作权限 <b>*</b></span>
+          <div class="permission-grid">
+            <label><input type="checkbox" name="permissions" value="projects"><i></i><span><strong>项目管理</strong><small>项目与文件</small></span></label>
+            <label><input type="checkbox" name="permissions" value="categories"><i></i><span><strong>分类管理</strong><small>分类维护</small></span></label>
+            <label><input type="checkbox" name="permissions" value="analytics"><i></i><span><strong>数据统计</strong><small>访问与下载</small></span></label>
+            <label><input type="checkbox" name="permissions" value="inquiries"><i></i><span><strong>咨询留言</strong><small>线索处理</small></span></label>
+            <label><input type="checkbox" name="permissions" value="settings"><i></i><span><strong>内容设置</strong><small>站点内容</small></span></label>
+          </div>
+        </div>
+        <label class="switch-field padded">
+          <span>账号状态</span>
+          <span class="switch-row">
+            <input type="checkbox" name="active" checked>
+            <i></i>
+            <span><strong>启用账号</strong><small>关闭后该账号将无法登录</small></span>
+          </span>
+        </label>
+      </div>
+      <div class="dialog-footer">
+        <button class="secondary-button" type="button" data-close-dialog="adminDialog">取消</button>
+        <button class="primary-button" type="submit">
+          <span class="button-label">保存账号</span>
+          <span class="button-loading" hidden>正在保存...</span>
+        </button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="admin-dialog compact-dialog" id="passwordDialog" aria-labelledby="passwordDialogTitle">
+    <form id="passwordForm">
+      <div class="dialog-header">
+        <div>
+          <span class="dialog-kicker">ACCOUNT SECURITY</span>
+          <h2 id="passwordDialogTitle">修改登录密码</h2>
+          <p>更新后当前会话将自动续签</p>
+        </div>
+        <button class="dialog-close" type="button" data-close-dialog="passwordDialog" aria-label="关闭">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <div class="dialog-body">
+        <label class="admin-field">
+          <span>当前密码 <b>*</b></span>
+          <input type="password" name="currentPassword" autocomplete="current-password" required>
+        </label>
+        <label class="admin-field">
+          <span>新密码 <b>*</b></span>
+          <input type="password" name="newPassword" minlength="8" autocomplete="new-password" placeholder="至少 8 位，需包含字母和数字" required>
+        </label>
+        <label class="admin-field">
+          <span>确认新密码 <b>*</b></span>
+          <input type="password" name="confirmPassword" minlength="8" autocomplete="new-password" required>
+        </label>
+      </div>
+      <div class="dialog-footer">
+        <button class="secondary-button" type="button" data-close-dialog="passwordDialog">取消</button>
+        <button class="primary-button" type="submit">确认修改</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="admin-dialog compact-dialog" id="confirmDialog" aria-labelledby="confirmDialogTitle">
+    <div class="confirm-dialog-content">
+      <span class="confirm-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2.5 20h19L12 3Z"/><path d="M12 9v5M12 17h.01"/></svg>
+      </span>
+      <h2 id="confirmDialogTitle">确认操作</h2>
+      <p id="confirmDialogText">此操作无法撤销。</p>
+    </div>
+    <div class="dialog-footer">
+      <button class="secondary-button" type="button" id="confirmCancelButton">取消</button>
+      <button class="danger-button" type="button" id="confirmActionButton">确认删除</button>
+    </div>
+  </dialog>
+
+  <dialog class="admin-dialog compact-dialog" id="promptDialog" aria-labelledby="promptDialogTitle">
+    <form id="promptForm">
+      <div class="dialog-header">
+        <div>
+          <span class="dialog-kicker">QUICK EDIT</span>
+          <h2 id="promptDialogTitle">修改名称</h2>
+        </div>
+        <button class="dialog-close" type="button" data-close-dialog="promptDialog" aria-label="关闭">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <div class="dialog-body">
+        <label class="admin-field">
+          <span id="promptDialogLabel">名称</span>
+          <input type="text" name="value" maxlength="180" required>
+        </label>
+      </div>
+      <div class="dialog-footer">
+        <button class="secondary-button" type="button" data-close-dialog="promptDialog">取消</button>
+        <button class="primary-button" type="submit">确认修改</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="admin-toast-region" id="adminToastRegion" aria-live="polite" aria-atomic="true"></div>
+  <script type="module" src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#081a2f"/>
+      <stop offset=".55" stop-color="#102f4e"/>
+      <stop offset="1" stop-color="#0b243e"/>
+    </linearGradient>
+    <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#d7b667" stop-opacity=".2"/>
+      <stop offset=".5" stop-color="#e7ca85"/>
+      <stop offset="1" stop-color="#d7b667" stop-opacity=".1"/>
+    </linearGradient>
+    <radialGradient id="blue">
+      <stop stop-color="#3db5ce" stop-opacity=".36"/>
+      <stop offset="1" stop-color="#3db5ce" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <circle cx="1180" cy="420" r="510" fill="url(#blue)"/>
+  <g opacity=".18" stroke="#7cadc1">
+    <circle cx="1160" cy="460" r="180" fill="none"/>
+    <circle cx="1160" cy="460" r="292" fill="none"/>
+    <circle cx="1160" cy="460" r="404" fill="none"/>
+    <path d="M650 460h940M1160-50v1020M780 80l760 760M1540 80L780 840"/>
+  </g>
+  <g transform="translate(885 190)">
+    <path d="M0 170h470M236 0v480" stroke="#a3c4d4" stroke-opacity=".18"/>
+    <path d="M32 390L178 210 320 288 520 70" fill="none" stroke="url(#line)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <g fill="#0a223a" stroke="#8fb4c4" stroke-opacity=".35">
+      <circle cx="32" cy="390" r="18"/>
+      <circle cx="178" cy="210" r="18"/>
+      <circle cx="320" cy="288" r="18"/>
+      <circle cx="520" cy="70" r="24" fill="#d5b66b" stroke="#f1ddab"/>
+    </g>
+    <g transform="translate(330 318)">
+      <rect width="290" height="162" rx="22" fill="#0b263f" stroke="#8db8c9" stroke-opacity=".25"/>
+      <text x="28" y="47" fill="#8eaebe" font-family="Microsoft YaHei, sans-serif" font-size="18">本月有效线索</text>
+      <text x="28" y="105" fill="#f3f6f8" font-family="Microsoft YaHei, sans-serif" font-size="50" font-weight="700">2,860</text>
+      <path d="M218 84l18-18 14 8 22-25" fill="none" stroke="#d8b968" stroke-width="4" stroke-linecap="round"/>
+    </g>
+  </g>
+  <g transform="translate(120 196)">
+    <rect width="156" height="38" rx="19" fill="#d6b568" fill-opacity=".14" stroke="#d6b568" stroke-opacity=".4"/>
+    <text x="28" y="26" fill="#e5cc8d" font-family="Microsoft YaHei, sans-serif" font-size="18" letter-spacing="3">GROWTH SAAS</text>
+    <text x="0" y="184" fill="#f5f7f9" font-family="Microsoft YaHei, sans-serif" font-size="82" font-weight="700">星链</text>
+    <text x="0" y="256" fill="#f5f7f9" font-family="Microsoft YaHei, sans-serif" font-size="54" font-weight="300">让每条线索都有去处</text>
+    <path d="M0 305h96" stroke="#d5b466" stroke-width="5"/>
+    <text x="0" y="366" fill="#a4c0ce" font-family="Microsoft YaHei, sans-serif" font-size="25" letter-spacing="2">获客 · 分配 · 跟进 · 转化</text>
+  </g>
+</svg>

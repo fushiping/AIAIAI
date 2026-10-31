@@ -1,0 +1,29 @@
+{
+  "name": "fushi-ai-project-vip",
+  "version": "1.0.0",
+  "private": true,
+  "description": "傅先生AI项目VIP项目展示与分发管理系统",
+  "type": "module",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "test:smoke": "node scripts/smoke-test.js",
+    "test:visual": "node scripts/visual-check.js",
+    "check": "node --check server/index.js && node --check server/routes/admin.js && node --check server/routes/public.js && node --check public/assets/api.js && node --check public/assets/app.js && node --check public/assets/404.js && node --check public/admin/admin.js && node scripts/content-check.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cookie-parser": "^1.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^8.1.0",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.2"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.64.1"
+  }
+}

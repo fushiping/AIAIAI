@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#07192f"/>
+      <stop offset=".58" stop-color="#123d61"/>
+      <stop offset="1" stop-color="#1e607a"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#f4db9a"/>
+      <stop offset="1" stop-color="#aa7d31"/>
+    </linearGradient>
+    <radialGradient id="glow">
+      <stop stop-color="#53c9dc" stop-opacity=".6"/>
+      <stop offset="1" stop-color="#53c9dc" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0V64" fill="none" stroke="#a3d8e8" stroke-opacity=".08"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="url(#grid)"/>
+  <circle cx="1290" cy="140" r="420" fill="url(#glow)"/>
+  <path d="M0 690C320 560 590 790 870 645s470-55 730-180v435H0z" fill="#061529" opacity=".42"/>
+  <g transform="translate(850 170) rotate(-4)">
+    <rect width="610" height="500" rx="28" fill="#0d2743" stroke="#8fc5d7" stroke-opacity=".24"/>
+    <rect x="42" y="42" width="526" height="58" rx="15" fill="#173d5d"/>
+    <circle cx="78" cy="71" r="8" fill="#d9b665"/>
+    <circle cx="107" cy="71" r="8" fill="#4eaaba"/>
+    <path d="M150 71h230" stroke="#85a5bb" stroke-width="8" stroke-linecap="round" opacity=".35"/>
+    <rect x="42" y="132" width="128" height="320" rx="17" fill="#0a1f37"/>
+    <path d="M76 175h60M76 210h45M76 245h55M76 280h36M76 315h58" stroke="#9cbbc9" stroke-width="8" stroke-linecap="round" opacity=".55"/>
+    <rect x="196" y="132" width="372" height="145" rx="18" fill="#183f5d"/>
+    <rect x="226" y="166" width="190" height="14" rx="7" fill="#d9b665" opacity=".9"/>
+    <rect x="226" y="200" width="288" height="9" rx="4.5" fill="#88b3c5" opacity=".45"/>
+    <rect x="226" y="225" width="240" height="9" rx="4.5" fill="#88b3c5" opacity=".3"/>
+    <rect x="196" y="302" width="177" height="150" rx="18" fill="#123853"/>
+    <rect x="391" y="302" width="177" height="150" rx="18" fill="#123853"/>
+    <path d="M225 404l35-35 28 20 51-55" fill="none" stroke="#e0c278" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="491" cy="371" r="43" fill="none" stroke="#71c5d0" stroke-width="14" stroke-dasharray="188 84"/>
+    <circle cx="491" cy="371" r="9" fill="#f1d889"/>
+  </g>
+  <g transform="translate(120 190)">
+    <rect x="0" y="0" width="118" height="38" rx="19" fill="#d6b568" fill-opacity=".15" stroke="#d6b568" stroke-opacity=".45"/>
+    <circle cx="23" cy="19" r="5" fill="#e4c77f"/>
+    <text x="42" y="26" fill="#e9d59f" font-family="Microsoft YaHei, sans-serif" font-size="18" letter-spacing="4">AI CONTENT SYSTEM</text>
+    <text x="0" y="184" fill="#f4f7fa" font-family="Microsoft YaHei, sans-serif" font-size="82" font-weight="700">智稿</text>
+    <text x="0" y="256" fill="#f4f7fa" font-family="Microsoft YaHei, sans-serif" font-size="54" font-weight="300">让好内容持续发生</text>
+    <path d="M0 305h96" stroke="url(#gold)" stroke-width="5"/>
+    <text x="0" y="366" fill="#a8c4d3" font-family="Microsoft YaHei, sans-serif" font-size="25" letter-spacing="2">选题 · 生产 · 审核 · 沉淀</text>
+  </g>
+</svg>

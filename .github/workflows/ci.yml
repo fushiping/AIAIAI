@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - name: Start application and run smoke test
+        env:
+          PORT: 18931
+          NODE_ENV: development
+          ADMIN_USERNAME: admin
+          ADMIN_PASSWORD: FushiVIP@2026
+          TEST_BASE_URL: http://127.0.0.1:18931
+        run: |
+          npm start > /tmp/fushi-vip.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:18931/api/public/health; then
+              break
+            fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:18931/api/public/health
+          set +e
+          npm run test:smoke
+          status=$?
+          cat /tmp/fushi-vip.log
+          exit $status

@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <base href="__APP_BASE__">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#081a2f">
+  <meta name="description" content="傅先生AI项目VIP，精选可落地、可合作、可持续迭代的AI项目与数字化解决方案。">
+  <title>傅先生AI项目VIP｜AI项目合作与项目资源平台</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main" data-content-key="global.skipLink">跳至主要内容</a>
+
+  <header class="site-header" id="siteHeader">
+    <div class="container nav-shell">
+      <a class="brand" href="#top" aria-label="返回首页">
+        <span class="brand-mark" aria-hidden="true">
+          <span>F</span>
+        </span>
+        <span class="brand-copy">
+          <strong class="brand-text">傅先生AI项目VIP</strong>
+          <small data-content-key="brand.tagline">PROJECT &amp; COOPERATION</small>
+        </span>
+      </a>
+
+      <nav class="desktop-nav" aria-label="主导航">
+        <a href="#projects" data-content-key="nav.projects">全部项目</a>
+        <a href="#categories" data-category-link data-content-key="nav.categories">项目分类</a>
+        <a href="#trust" data-content-key="nav.trust">合作保障</a>
+        <a href="#contact" data-content-key="nav.contact">合作咨询</a>
+      </nav>
+
+      <a class="nav-cta" href="#contact">
+        <span data-content-key="nav.cta">洽谈合作</span>
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4"/></svg>
+      </a>
+
+      <button class="mobile-menu-button" id="mobileMenuButton" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="mobileNav">
+        <span></span><span></span>
+      </button>
+    </div>
+    <nav class="mobile-nav" id="mobileNav" aria-label="移动端导航">
+      <a href="#projects" data-content-key="nav.projects">全部项目</a>
+      <a href="#categories" data-content-key="nav.categories">项目分类</a>
+      <a href="#trust" data-content-key="nav.trust">合作保障</a>
+      <a href="#contact" data-content-key="nav.contact">合作咨询</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="hero-grid-lines" aria-hidden="true"></div>
+      <div class="hero-glow hero-glow-one" aria-hidden="true"></div>
+      <div class="hero-glow hero-glow-two" aria-hidden="true"></div>
+      <div class="container hero-layout">
+        <div class="hero-copy reveal">
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            <span id="heroEyebrow">精选 AI 项目 · 可信赖的落地伙伴</span>
+          </div>
+          <h1 id="heroTitle">把经过验证的 AI 项目，<br>变成可落地的增长方案</h1>
+          <p class="hero-subtitle" id="heroSubtitle">聚焦 AI 创作、SaaS 系统、变现项目与企业技术服务。每个项目都提供清晰的能力边界、交付资料与深入合作通道。</p>
+          <div class="hero-trust-line">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4.5 6v5.4c0 4.4 3 7.6 7.5 9.6 4.5-2 7.5-5.2 7.5-9.6V6L12 3Z"/><path d="m8.8 12 2.1 2.1 4.5-4.6"/></svg>
+            <span id="heroTrust">从需求评估到部署交付，每一步都有明确路径；先把价值讲清楚，再谈合作。</span>
+          </div>
+          <div class="hero-actions">
+            <a class="button button-gold" href="#projects">
+              <span data-content-key="hero.primaryAction">浏览全部项目</span>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4"/></svg>
+            </a>
+            <a class="button button-ghost-light" href="#contact" data-content-key="hero.secondaryAction">聊聊合作需求</a>
+          </div>
+          <ul class="hero-points" id="heroHighlights" aria-label="项目服务特点">
+            <li>项目能力透明</li>
+            <li>交付资料完备</li>
+            <li>支持深度合作</li>
+          </ul>
+        </div>
+
+        <div class="hero-visual reveal reveal-delay">
+          <div class="visual-orbit orbit-one" aria-hidden="true"></div>
+          <div class="visual-orbit orbit-two" aria-hidden="true"></div>
+          <div class="hero-project-panel" id="heroFeatured">
+            <div class="panel-topline">
+              <span data-content-key="hero.featuredLabel">FEATURED PROJECT</span>
+              <span class="live-state"><i></i> <b data-content-key="hero.featuredStatus">已上架</b></span>
+            </div>
+            <div class="panel-cover">
+              <div class="cover-skeleton"></div>
+            </div>
+            <div class="panel-project-info">
+              <span class="panel-category" data-content-key="hero.featuredCategory">项目精选</span>
+              <h2 data-content-key="hero.featuredLoadingTitle">正在载入项目...</h2>
+              <p data-content-key="hero.featuredLoadingDesc">从真实业务场景出发，寻找可部署、可运营的数字化方案。</p>
+            </div>
+            <div class="panel-footer">
+              <span data-content-key="hero.featuredFooter">项目资料与能力说明</span>
+              <span class="panel-arrow">
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4"/></svg>
+              </span>
+            </div>
+          </div>
+          <div class="floating-note floating-note-top">
+            <span class="note-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v11H8l-4 3v-14Z"/><path d="M8 9h8M8 12.5h5"/></svg>
+            </span>
+            <span><strong data-content-key="hero.floatingTopTitle">1 对 1</strong><small data-content-key="hero.floatingTopText">合作需求评估</small></span>
+          </div>
+          <div class="floating-note floating-note-bottom">
+            <span class="note-check">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 12 4 4 8-9"/></svg>
+            </span>
+            <span><strong data-content-key="hero.floatingBottomTitle">资料完备</strong><small data-content-key="hero.floatingBottomText">下载即了解</small></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="container metrics-bar reveal">
+        <div class="metric-item">
+          <strong id="metricProjects">—</strong>
+          <span data-content-key="hero.metricProjectsLabel">精选上架项目</span>
+        </div>
+        <div class="metric-divider"></div>
+        <div class="metric-item">
+          <strong id="metricCategories">—</strong>
+          <span data-content-key="hero.metricCategoriesLabel">业务解决方案分类</span>
+        </div>
+        <div class="metric-divider"></div>
+        <div class="metric-item metric-text">
+          <strong data-content-key="hero.metricDeliveryTitle">按需交付</strong>
+          <span data-content-key="hero.metricDeliveryText">咨询、部署与长期支持</span>
+        </div>
+        <a class="metric-action" href="#contact">
+          <span data-content-key="hero.metricAction">获取项目建议</span>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <section class="section projects-section" id="projects">
+      <div class="container">
+        <div class="section-heading projects-heading">
+          <div>
+            <div class="section-kicker"><span data-content-key="projects.index">01</span> <b data-content-key="projects.kicker">PROJECT MATRIX</b></div>
+            <h2><span data-content-key="projects.headingMain">找到适合你业务的</span><br><em data-content-key="projects.headingAccent">下一套增长工具</em></h2>
+          </div>
+          <p data-content-key="projects.intro">先看业务场景，再看功能能力，最后判断合作方式。每个项目都保留真实的边界，不夸大、不模糊。</p>
+        </div>
+
+        <div class="category-block" id="categories">
+          <div class="category-bar" id="categoryFilter" role="group" aria-label="按项目分类筛选">
+            <button class="category-button active" type="button" data-category="all">
+              <span data-content-key="projects.allFilter">全部项目</span><b id="allProjectCount">0</b>
+            </button>
+          </div>
+          <p class="category-description" id="categoryDescription" data-content-key="projects.defaultCategoryDesc">全部项目均经过信息统一整理，支持在线查看、资料下载与合作咨询。</p>
+        </div>
+
+        <div class="project-grid" id="projectGrid" aria-live="polite">
+          <article class="project-card skeleton-card" aria-hidden="true">
+            <div class="skeleton-cover"></div>
+            <div class="skeleton-body"><i></i><i></i><i></i></div>
+          </article>
+          <article class="project-card skeleton-card" aria-hidden="true">
+            <div class="skeleton-cover"></div>
+            <div class="skeleton-body"><i></i><i></i><i></i></div>
+          </article>
+          <article class="project-card skeleton-card" aria-hidden="true">
+            <div class="skeleton-cover"></div>
+            <div class="skeleton-body"><i></i><i></i><i></i></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="statement-band">
+      <div class="container statement-layout">
+        <div class="statement-index" data-content-key="statement.index">FUSHI / AI</div>
+        <blockquote id="serviceStatement">不是卖一个概念，而是交付一套能跑起来的方案</blockquote>
+        <div class="statement-mark" aria-hidden="true">“</div>
+      </div>
+    </section>
+
+    <section class="section trust-section" id="trust">
+      <div class="container">
+        <div class="section-heading trust-heading">
+          <div>
+            <div class="section-kicker light"><span data-content-key="trust.index">02</span> <b data-content-key="trust.kicker">RELIABLE DELIVERY</b></div>
+            <h2 id="trustHeading">把不确定，<br>变成可验证的每一步</h2>
+          </div>
+          <p id="trustSubtitle">我们更关注项目是否适合你的业务，以及上线之后能否持续产生价值。</p>
+        </div>
+
+        <div class="trust-grid" id="trustPoints">
+          <article class="trust-card">
+            <span class="trust-number">01</span>
+            <div class="trust-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5h16v14H4Z"/><path d="M8 9h8M8 13h5"/></svg>
+            </div>
+            <h3>真实场景优先</h3>
+            <p>围绕真实经营问题组织方案，不用空泛概念包装。</p>
+          </article>
+          <article class="trust-card">
+            <span class="trust-number">02</span>
+            <div class="trust-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><circle cx="12" cy="12" r="4"/></svg>
+            </div>
+            <h3>上线过程可追踪</h3>
+            <p>关键节点清晰同步，减少沟通成本与交付风险。</p>
+          </article>
+          <article class="trust-card">
+            <span class="trust-number">03</span>
+            <div class="trust-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7h-9M14 17H5M17 4l3 3-3 3M7 14l-3 3 3 3"/></svg>
+            </div>
+            <h3>持续更新与支持</h3>
+            <p>内容与资料由后台统一维护，合作后可结合实际持续迭代。</p>
+          </article>
+        </div>
+
+        <div class="process-block">
+          <div class="process-heading">
+            <span data-content-key="trust.processLabel">合作路径</span>
+            <h3 id="processTitle">从了解项目，到真正用起来</h3>
+          </div>
+          <div class="process-list" id="processSteps">
+            <div class="process-item"><b>01</b><h4>查看项目与资料</h4><p>了解功能范围与交付边界。</p></div>
+            <div class="process-item"><b>02</b><h4>提交合作需求</h4><p>留下业务目标与联系方式。</p></div>
+            <div class="process-item"><b>03</b><h4>评估与演示</h4><p>确认预算、周期与适配方式。</p></div>
+            <div class="process-item"><b>04</b><h4>部署与支持</h4><p>进入实施、培训与持续运营。</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section contact-section" id="contact">
+      <div class="container">
+        <div class="contact-shell">
+          <div class="contact-info">
+            <div class="section-kicker gold"><span id="contactSectionIndex">03</span> <b id="contactSectionLabel">START A CONVERSATION</b></div>
+            <span class="contact-eyebrow" id="contactEyebrow">开启合作</span>
+            <h2 id="contactTitle">先聊聊你的业务，<br>再决定下一步</h2>
+            <p id="contactSubtitle">留下联系方式和核心需求，我们会尽快与你沟通项目适配度、交付方式与预算范围。</p>
+            <div class="contact-channels">
+              <div class="contact-channel">
+                <span class="channel-icon">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h12v8H9l-5 4V5Z"/><path d="M9 10h7M9 13h4"/><path d="M13 15h7v6l-3-2h-4v-4Z"/></svg>
+                </span>
+                <span><small data-content-key="contact.phoneLabel">QQ咨询</small><strong id="contactPhone">400-000-0000</strong></span>
+              </div>
+              <div class="contact-channel">
+                <span class="channel-icon">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v11H9l-4 3V5Z"/><path d="M8.5 9h7M8.5 12h4"/></svg>
+                </span>
+                <span><small data-content-key="contact.wechatLabel">微信咨询</small><strong id="contactWechat">fushi-ai</strong></span>
+              </div>
+              <div class="contact-channel">
+                <span class="channel-icon">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/></svg>
+                </span>
+                <span><small data-content-key="contact.hoursLabel">响应时间</small><strong id="contactHours">工作日 09:00 - 18:00</strong></span>
+              </div>
+            </div>
+            <div class="contact-promise">
+              <span><i></i> <b data-content-key="contact.promise">需求信息仅用于本次业务沟通</b></span>
+            </div>
+          </div>
+
+          <div class="form-panel">
+            <div class="form-heading">
+              <div>
+                <span data-content-key="contact.formKicker">合作需求登记</span>
+                <h3 data-content-key="contact.formTitle">告诉我们你正在解决什么问题</h3>
+              </div>
+              <span class="form-number" data-content-key="contact.formNumber">01—04</span>
+            </div>
+            <div class="intent-banner" id="contactIntent" hidden>
+              <span><strong data-content-key="contact.intentLabel">合作意向：</strong><b id="contactIntentText"></b></span>
+              <button type="button" id="clearIntent" aria-label="清除项目意向">×</button>
+            </div>
+            <form id="contactForm" novalidate>
+              <input type="hidden" name="website" value="" tabindex="-1" autocomplete="off">
+              <input type="hidden" name="projectId" id="contactProjectId" value="">
+              <div class="form-row">
+                <label class="field">
+                  <span><span data-content-key="contact.fieldName">你的称呼</span> <b>*</b></span>
+                  <input type="text" name="name" maxlength="40" placeholder="例如：王先生" data-content-placeholder="contact.namePlaceholder" autocomplete="name" required>
+                </label>
+                <label class="field">
+                  <span><span data-content-key="contact.fieldPhone">联系电话</span> <b>*</b></span>
+                  <input type="tel" name="phone" maxlength="30" placeholder="手机号或座机" data-content-placeholder="contact.phonePlaceholder" autocomplete="tel" required>
+                </label>
+              </div>
+              <div class="form-row">
+                <label class="field">
+                  <span data-content-key="contact.fieldCompany">公司 / 团队</span>
+                  <input type="text" name="company" maxlength="100" placeholder="选填，便于了解业务背景" data-content-placeholder="contact.companyPlaceholder" autocomplete="organization">
+                </label>
+                <label class="field">
+                  <span data-content-key="contact.fieldWechat">微信</span>
+                  <input type="text" name="wechat" maxlength="60" placeholder="选填" data-content-placeholder="contact.wechatPlaceholder" autocomplete="off">
+                </label>
+              </div>
+              <label class="field">
+                <span><span data-content-key="contact.fieldMessage">想解决的问题</span> <b>*</b></span>
+                <textarea name="message" rows="4" maxlength="1200" placeholder="简单说明业务场景、目标或当前遇到的问题" data-content-placeholder="contact.messagePlaceholder" required></textarea>
+                <small class="field-count"><span id="messageCount">0</span>/1200</small>
+              </label>
+              <label class="consent">
+                <input type="checkbox" name="privacyConsent" required>
+                <span id="contactNotice">提交即表示同意仅将以上信息用于本次业务沟通，我们不会向无关第三方披露。</span>
+              </label>
+              <button class="button button-submit" type="submit">
+                <span class="button-label" data-content-key="contact.submit">提交合作需求</span>
+                <span class="button-loading" data-content-key="contact.submitting" hidden>正在提交...</span>
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4"/></svg>
+              </button>
+              <p class="form-legal" data-content-key="contact.legal">我们通常会在 1 个工作日内与你取得联系。</p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <button class="contact-float" id="floatingContactButton" type="button" aria-haspopup="dialog" aria-controls="contactQrDialog" hidden>
+    <span class="contact-float-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M4 5h16v12H9l-5 4V5Z"/><path d="M8 9h8M8 12.5h5"/></svg>
+    </span>
+    <span id="floatingContactLabel">联系顾问</span>
+  </button>
+
+  <footer class="site-footer">
+    <div class="container footer-main">
+      <div class="footer-brand">
+        <span class="brand-mark small" aria-hidden="true"><span>F</span></span>
+        <div>
+          <strong class="brand-text">傅先生AI项目VIP</strong>
+          <p data-content-key="footer.tagline">让优质 AI 项目被看见，也被真正用起来。</p>
+        </div>
+      </div>
+      <div class="footer-links">
+        <a href="#projects" data-content-key="footer.projects">项目中心</a>
+        <a href="#trust" data-content-key="footer.trust">合作保障</a>
+        <a href="#contact" data-content-key="footer.contact">合作咨询</a>
+      </div>
+    </div>
+  </footer>
+
+  <dialog class="project-dialog" id="projectDialog" aria-labelledby="detailTitle">
+    <div class="dialog-scroll">
+      <button class="dialog-close" type="button" data-close-project aria-label="关闭项目详情">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </button>
+      <div class="detail-cover">
+        <img id="detailCover" src="" alt="">
+        <div class="detail-cover-shade"></div>
+        <div class="detail-cover-meta">
+          <span class="detail-category" id="detailCategory">分类</span>
+          <span class="detail-state"><i></i> <b data-content-key="detail.status">项目已上架</b></span>
+        </div>
+      </div>
+      <div class="detail-content">
+        <div class="detail-heading">
+          <div>
+            <span class="detail-kicker" data-content-key="detail.kicker">PROJECT PROFILE</span>
+            <h2 id="detailTitle">项目名称</h2>
+            <p id="detailSlogan">项目简介</p>
+          </div>
+          <div class="detail-tags" id="detailTags"></div>
+        </div>
+        <div class="detail-divider"></div>
+        <div class="detail-columns">
+          <div class="detail-description">
+            <h3 data-content-key="detail.introTitle">项目介绍</h3>
+            <p id="detailDescription"></p>
+          </div>
+          <aside class="detail-highlights">
+            <h3 data-content-key="detail.capabilitiesTitle">核心能力</h3>
+            <ul id="detailHighlights"></ul>
+          </aside>
+        </div>
+        <div class="detail-files" id="detailFilesSection">
+          <div class="detail-files-heading">
+            <div>
+              <h3 data-content-key="detail.filesTitle">可下载资料</h3>
+              <p data-content-key="detail.filesDescription">文件由平台统一维护，点击即可按下载规则获取。</p>
+            </div>
+            <span id="detailFileCount">0 个文件</span>
+          </div>
+          <div class="file-list" id="detailFileList"></div>
+        </div>
+        <div class="detail-footnote">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4.5 6v5.4c0 4.4 3 7.6 7.5 9.6 4.5-2 7.5-5.2 7.5-9.6V6L12 3Z"/><path d="m8.8 12 2.1 2.1 4.5-4.6"/></svg>
+          <span data-content-key="detail.footnote">项目信息与文件由运营后台实时维护，合作范围以双方最终确认的方案为准。</span>
+        </div>
+      </div>
+    </div>
+    <div class="detail-actions-bar">
+      <div class="detail-action-note">
+        <span data-content-key="detail.actionEyebrow">对项目感兴趣？</span>
+        <strong data-content-key="detail.actionTitle">先沟通，再选择最合适的合作方式</strong>
+      </div>
+      <div class="detail-actions">
+        <button class="detail-button detail-button-contact" type="button" id="detailContactButton">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v11H9l-4 3V5Z"/><path d="M8.5 9h7M8.5 12h4"/></svg>
+          <span data-content-key="detail.contactAction">深入了解</span>
+        </button>
+        <button class="detail-button detail-button-file" type="button" id="detailSoftwareButton" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4"/><path d="M5 19h14"/></svg>
+          <span data-content-key="detail.softwareAction">软件下载</span>
+        </button>
+        <button class="detail-button detail-button-file" type="button" id="detailDocumentButton" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6V3Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>
+          <span data-content-key="detail.documentAction">资料下载</span>
+        </button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="file-dialog" id="fileDialog" aria-labelledby="fileDialogTitle">
+    <div class="file-dialog-head">
+      <div>
+        <span data-content-key="detail.filePickerKicker">选择文件</span>
+        <h3 id="fileDialogTitle">软件安装包</h3>
+      </div>
+      <button type="button" class="dialog-close static" data-close-files aria-label="关闭文件选择">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div class="file-picker-list" id="filePickerList"></div>
+  </dialog>
+
+  <dialog class="lead-dialog" id="leadDialog" aria-labelledby="leadDialogTitle">
+    <button class="dialog-close static" type="button" data-close-lead aria-label="关闭留资窗口">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+    </button>
+    <div class="lead-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4"/><path d="M5 19h14"/></svg>
+    </div>
+    <span class="lead-kicker" data-content-key="lead.kicker">DOWNLOAD ACCESS</span>
+    <h3 id="leadDialogTitle" data-content-key="lead.title">留下联系方式，获取项目资料</h3>
+    <p><span data-content-key="lead.descriptionBefore">为便于向你提供适配说明与后续支持，请填写基本信息。提交后将自动开始下载</span> <strong id="leadFileName" data-content-key="lead.fileFallback">文件</strong><span data-content-key="lead.descriptionAfter">。</span></p>
+    <form id="leadForm" novalidate>
+      <input type="hidden" name="website" value="" tabindex="-1" autocomplete="off">
+      <div class="form-row">
+        <label class="field compact">
+          <span><span data-content-key="lead.nameLabel">称呼</span> <b>*</b></span>
+          <input type="text" name="name" maxlength="40" placeholder="怎么称呼你" data-content-placeholder="lead.namePlaceholder" autocomplete="name" required>
+        </label>
+        <label class="field compact">
+          <span><span data-content-key="lead.phoneLabel">联系电话</span> <b>*</b></span>
+          <input type="tel" name="phone" maxlength="30" placeholder="手机号或座机" data-content-placeholder="lead.phonePlaceholder" autocomplete="tel" required>
+        </label>
+      </div>
+      <label class="field compact">
+        <span data-content-key="lead.messageLabel">补充说明</span>
+        <textarea name="message" rows="3" maxlength="1200" placeholder="想重点了解什么？" data-content-placeholder="lead.messagePlaceholder" data-content-default="lead.defaultMessage">希望获取该项目的详细资料并进一步沟通。</textarea>
+      </label>
+      <input type="hidden" name="company" value="">
+      <input type="hidden" name="wechat" value="">
+      <input type="hidden" name="projectId" id="leadProjectId" value="">
+      <input type="hidden" name="sourceFileId" id="leadSourceFileId" value="">
+      <label class="consent">
+        <input type="checkbox" name="privacyConsent" required checked>
+        <span data-content-key="lead.consent">同意仅将以上信息用于本次项目沟通与资料服务。</span>
+      </label>
+      <button class="button button-submit" type="submit">
+        <span class="button-label" data-content-key="lead.submit">提交并下载</span>
+        <span class="button-loading" data-content-key="lead.submitting" hidden>正在提交...</span>
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4"/></svg>
+      </button>
+    </form>
+  </dialog>
+
+  <dialog class="contact-qr-dialog" id="contactQrDialog" aria-labelledby="floatingContactTitle">
+    <button class="contact-qr-close" type="button" data-close-contact-qr aria-label="关闭联系二维码">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+    </button>
+    <div class="contact-qr-dialog-body">
+      <div class="qr-dialog-heading">
+        <span id="floatingContactEyebrow">DIRECT CONTACT</span>
+        <h2 id="floatingContactTitle">项目合作咨询</h2>
+        <p id="floatingContactDescription">扫码添加项目顾问，获取项目资料、合作方式与预算建议。</p>
+      </div>
+      <div class="qr-code-frame">
+        <i></i><i></i><i></i><i></i>
+        <img id="floatingContactQr" src="assets/contact-qr-placeholder.svg" alt="项目顾问联系二维码">
+      </div>
+      <p class="qr-scan-hint" id="floatingContactQrHint">微信扫码，添加项目顾问</p>
+      <div class="qr-admin-card">
+        <span class="qr-admin-media">
+          <img id="floatingContactAdminImage" src="assets/admin-emblem.svg" alt="管理员标识">
+          <b id="floatingContactAdminFallback" hidden>F</b>
+        </span>
+        <span class="qr-admin-copy">
+          <strong id="floatingContactAdminName">傅先生AI项目顾问</strong>
+          <small id="floatingContactAdminTitle">项目合作顾问</small>
+        </span>
+        <span class="qr-admin-verified">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 12 4 4 8-9"/></svg>
+          <b id="floatingContactBadge">项目顾问</b>
+        </span>
+      </div>
+      <p class="qr-dialog-note" id="floatingContactNote">添加时请备注“项目咨询”，便于我们快速了解你的需求。</p>
+    </div>
+  </dialog>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+
+  <script type="module" src="assets/app.js"></script>
+</body>
+</html>

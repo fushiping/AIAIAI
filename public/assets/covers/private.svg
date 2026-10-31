@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#07182d"/>
+      <stop offset=".6" stop-color="#153650"/>
+      <stop offset="1" stop-color="#203f50"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#f2dfad"/>
+      <stop offset="1" stop-color="#b48434"/>
+    </linearGradient>
+    <radialGradient id="glow">
+      <stop stop-color="#8ac6d2" stop-opacity=".25"/>
+      <stop offset="1" stop-color="#8ac6d2" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <circle cx="1240" cy="440" r="470" fill="url(#glow)"/>
+  <g opacity=".13" stroke="#8bb9c8">
+    <path d="M720 700c120-260 365-400 730-420"/>
+    <path d="M650 750c210-350 470-500 770-470"/>
+    <path d="M820 640c10-200 140-360 330-470"/>
+    <path d="M970 650c40-140 120-240 260-310"/>
+  </g>
+  <g transform="translate(900 165)">
+    <circle cx="280" cy="280" r="240" fill="none" stroke="#d8c189" stroke-opacity=".22" stroke-dasharray="4 12"/>
+    <circle cx="280" cy="280" r="166" fill="#0d2941" stroke="#9fbdca" stroke-opacity=".24"/>
+    <circle cx="280" cy="280" r="82" fill="url(#gold)"/>
+    <path d="M245 280l24 23 48-55" fill="none" stroke="#0b263d" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <g fill="#d7b76d">
+      <circle cx="280" cy="36" r="8"/>
+      <circle cx="524" cy="280" r="8"/>
+      <circle cx="280" cy="524" r="8"/>
+      <circle cx="36" cy="280" r="8"/>
+    </g>
+    <g fill="#0b263d" stroke="#8cb4c5" stroke-opacity=".3">
+      <circle cx="103" cy="145" r="42"/>
+      <circle cx="457" cy="145" r="42"/>
+      <circle cx="457" cy="415" r="42"/>
+      <circle cx="103" cy="415" r="42"/>
+    </g>
+    <g fill="#9fc1cf">
+      <circle cx="103" cy="134" r="11"/>
+      <circle cx="457" cy="134" r="11"/>
+      <circle cx="457" cy="404" r="11"/>
+      <circle cx="103" cy="404" r="11"/>
+    </g>
+  </g>
+  <g transform="translate(120 196)">
+    <rect width="163" height="38" rx="19" fill="#d6b568" fill-opacity=".14" stroke="#d6b568" stroke-opacity=".4"/>
+    <text x="27" y="26" fill="#e5cc8d" font-family="Microsoft YaHei, sans-serif" font-size="18" letter-spacing="3">PRIVATE DOMAIN</text>
+    <text x="0" y="184" fill="#f5f7f9" font-family="Microsoft YaHei, sans-serif" font-size="82" font-weight="700">私域转化</text>
+    <text x="0" y="256" fill="#f5f7f9" font-family="Microsoft YaHei, sans-serif" font-size="54" font-weight="300">把关系沉淀为长期价值</text>
+    <path d="M0 305h96" stroke="url(#gold)" stroke-width="5"/>
+    <text x="0" y="366" fill="#a7c2d0" font-family="Microsoft YaHei, sans-serif" font-size="25" letter-spacing="2">分层 · 触达 · 成交 · 复购</text>
+  </g>
+</svg>
