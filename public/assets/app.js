@@ -5,6 +5,7 @@ const state = {
   categories: [],
   projects: [],
   metrics: {},
+  featuredImageData: '',
   activeCategory: 'all',
   currentProject: null,
   pendingFile: null,
@@ -100,7 +101,12 @@ async function init() {
   setupReveal();
   setupNavigation();
   try {
-    await loadSiteData();
+    const initialData = readInitialSiteData();
+    if (initialData) {
+      await applySiteData(initialData);
+    } else {
+      await loadSiteData();
+    }
     trackVisit();
     connectLiveUpdates();
     window.setInterval(() => syncSiteData(), 60_000);
@@ -114,13 +120,30 @@ async function init() {
   }
 }
 
+function readInitialSiteData() {
+  const element = byId('initialSiteData');
+  const payload = element?.dataset.payload || '';
+  if (!payload || payload.includes('__INITIAL_SITE_DATA__')) return null;
+  try {
+    const binary = atob(payload);
+    const bytes = Uint8Array.from(binary, (character) => character.charCodeAt(0));
+    return JSON.parse(new TextDecoder().decode(bytes));
+  } catch {
+    return null;
+  }
+}
+
 async function loadSiteData() {
   const response = await api('/api/public/bootstrap');
-  const data = response.data;
+  return applySiteData(response.data);
+}
+
+async function applySiteData(data) {
+  const fingerprintProjects = (data.projects || []).map(({ cardImageData, ...project }) => project);
   const fingerprint = JSON.stringify({
     settings: data.settings,
     categories: data.categories,
-    projects: data.projects,
+    projects: fingerprintProjects,
     metrics: data.metrics
   });
   const changed = fingerprint !== siteFingerprint;
@@ -131,6 +154,7 @@ async function loadSiteData() {
     state.categories = data.categories || [];
     state.projects = data.projects || [];
     state.metrics = data.metrics || {};
+    state.featuredImageData = data.featuredImageData || '';
     if (
       state.activeCategory !== 'all'
       && !state.categories.some((category) => String(category.id) === String(state.activeCategory))
@@ -162,7 +186,7 @@ function connectLiveUpdates() {
   const source = new EventSource(appPath('/api/public/events'));
   source.addEventListener('connected', () => {
     document.documentElement.dataset.liveStatus = 'connected';
-    syncSiteData();
+    if (Date.now() - lastSiteSync > 2_000) syncSiteData();
   });
   source.addEventListener('site-update', () => {
     window.clearTimeout(liveSyncTimer);
@@ -280,7 +304,7 @@ function renderFeaturedProject() {
       <span class="live-state"><i></i> ${escapeHtml(uiText('hero.featuredStatus'))}</span>
     </div>
     <div class="panel-cover">
-      <img src="${escapeHtml(safeCover(project.coverUrl))}" alt="${escapeHtml(project.name)} 项目封面" loading="eager">
+      <img src="${escapeHtml(state.featuredImageData || safeCover(project.coverMediumUrl || project.coverUrl))}" alt="${escapeHtml(project.name)} 项目封面" width="1600" height="900" loading="eager" fetchpriority="high" decoding="async">
     </div>
     <div class="panel-project-info">
       <span class="panel-category">${escapeHtml(project.categoryName)}</span>
@@ -405,7 +429,7 @@ function renderProjects() {
     return `
       <article class="project-card" data-project-card="${project.id}">
         <div class="card-cover">
-          <img src="${escapeHtml(safeCover(project.coverUrl))}" alt="${escapeHtml(project.name)} 项目封面" loading="lazy">
+          <img src="${escapeHtml(project.cardImageData || safeCover(project.coverCardUrl || project.coverUrl))}" alt="${escapeHtml(project.name)} 项目封面" width="720" height="405" loading="${index < 2 ? 'eager' : 'lazy'}" fetchpriority="${index === 0 ? 'high' : 'auto'}" decoding="async">
           <span class="card-category">${escapeHtml(project.categoryName)}</span>
           <span class="card-index">${escapeHtml(uiText('projects.cardPrefix'))} / ${String(index + 1).padStart(2, '0')}</span>
         </div>
@@ -466,7 +490,7 @@ function applyProjectDetail(project) {
   setText('detailDescription', project.description);
 
   const cover = byId('detailCover');
-  cover.src = safeCover(project.coverUrl);
+  cover.src = safeCover(project.coverMediumUrl || project.coverUrl);
   cover.alt = `${project.name}项目封面`;
 
   const tags = byId('detailTags');

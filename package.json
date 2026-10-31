@@ -11,9 +11,11 @@
     "start": "node server/index.js",
     "dev": "node --watch server/index.js",
     "admin:reset": "node scripts/reset-admin.js",
+    "optimize:covers": "node scripts/optimize-covers.js",
     "test:smoke": "node scripts/smoke-test.js",
     "test:visual": "node scripts/visual-check.js",
-    "check": "node --check server/index.js && node --check server/routes/admin.js && node --check server/routes/public.js && node --check public/assets/api.js && node --check public/assets/app.js && node --check public/assets/404.js && node --check public/admin/admin.js && node --check scripts/reset-admin.js && node scripts/content-check.js"
+    "test:performance": "node scripts/perf-check.js",
+    "check": "node --check server/index.js && node --check server/routes/admin.js && node --check server/routes/public.js && node --check server/services/image-optimizer.js && node --check server/services/site-data.js && node --check public/assets/api.js && node --check public/assets/app.js && node --check public/assets/404.js && node --check public/admin/admin.js && node --check scripts/reset-admin.js && node --check scripts/optimize-covers.js && node --check scripts/perf-check.js && node scripts/content-check.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
@@ -22,7 +24,8 @@
     "express-rate-limit": "^8.1.0",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
-    "multer": "^2.0.2"
+    "multer": "^2.0.2",
+    "sharp": "^0.34.4"
   },
   "devDependencies": {
     "playwright-core": "^1.64.1"

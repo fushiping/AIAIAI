@@ -772,6 +772,13 @@ button {
   padding-block: 116px;
 }
 
+.projects-section,
+.trust-section,
+.contact-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}
+
 .projects-section {
   position: relative;
   background:

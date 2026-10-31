@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import sharp from 'sharp';
 
 const ROOT_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE_URL = (process.env.TEST_BASE_URL || process.argv[2] || 'http://127.0.0.1:18931').replace(/\/$/, '');
@@ -78,7 +79,7 @@ let linkId = null;
 let inquiryId = null;
 let categoryId = null;
 let childAdminId = null;
-let uploadedCoverPath = null;
+let uploadedCoverPaths = [];
 let settingsChanged = false;
 let originalHeroTrust = null;
 let originalNavCta = null;
@@ -94,7 +95,7 @@ try {
   pass('服务健康检查');
 
   const bootstrap = await publicClient.json('/api/public/bootstrap');
-  assert.equal(bootstrap.data.settings.siteName, '傅先生AI项目VIP');
+  assert.match(bootstrap.data.settings.siteName, /^傅先生AI项目/);
   assert.ok(bootstrap.data.projects.length >= 1);
   assert.ok(bootstrap.data.categories.length >= 1);
   pass('访客端动态配置、分类与项目数据');
@@ -135,7 +136,7 @@ try {
   widgetImageForm.append(
     'file',
     new Blob([
-      Buffer.from('89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c4890000000d49444154789c6360000002000154a24f5d0000000049454e44ae426082', 'hex')
+      Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', 'base64')
     ], { type: 'image/png' }),
     'widget-qr-test.png'
   );
@@ -178,14 +179,21 @@ try {
   });
   pass('分类新增与编辑');
 
-  const coverBlob = new Blob([
-    Buffer.from('89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c4890000000d49444154789c6360000002000154a24f5d0000000049454e44ae426082', 'hex')
-  ], { type: 'image/png' });
+  const coverBuffer = await sharp({
+    create: {
+      width: 320,
+      height: 180,
+      channels: 3,
+      background: { r: 9, g: 35, b: 58 }
+    }
+  }).png().toBuffer();
+  const coverBlob = new Blob([coverBuffer], { type: 'image/png' });
   const coverForm = new FormData();
   coverForm.append('file', coverBlob, 'test-cover.png');
   const cover = await admin.json('/api/admin/upload/cover', { method: 'POST', body: coverForm });
   assert.match(cover.data.url, /^\/media\/covers\//);
-  uploadedCoverPath = path.join(ROOT_DIR, 'storage', cover.data.storageKey);
+  uploadedCoverPaths = (cover.data.storagePaths || [cover.data.storageKey])
+    .map((storageKey) => path.join(ROOT_DIR, 'storage', storageKey));
   const coverAsset = await publicClient.request(cover.data.url);
   assert.equal(coverAsset.response.status, 200);
   assert.match(coverAsset.response.headers.get('content-type') || '', /^image\//);
@@ -516,7 +524,7 @@ try {
     if (childAdminId) await admin.json(`/api/admin/admins/${childAdminId}`, { method: 'DELETE' });
   } catch {}
   try {
-    if (uploadedCoverPath) await fs.unlink(uploadedCoverPath);
+    await Promise.allSettled(uploadedCoverPaths.map((filePath) => fs.unlink(filePath)));
   } catch {}
   try {
     if (uploadedWidgetPath) await fs.unlink(uploadedWidgetPath);

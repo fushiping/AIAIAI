@@ -1,4 +1,5 @@
 import crypto from 'node:crypto';
+import fs from 'node:fs';
 import path from 'node:path';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
@@ -40,6 +41,7 @@ import {
 } from '../services/storage.js';
 import { broadcastSiteUpdate } from '../services/events.js';
 import { mergeUiText, UI_TEXT_DEFAULTS, UI_TEXT_SCHEMA } from '../content.js';
+import { optimizeCoverImage } from '../services/image-optimizer.js';
 import {
   ApiError,
   asyncRoute,
@@ -544,19 +546,38 @@ router.post('/projects/batch', requirePermission('projects'), asyncRoute(async (
   res.json({ success: true, data: { affected: Number(result.changes) } });
 }));
 
-router.post('/upload/cover', requirePermission('projects'), coverUpload.single('file'), (req, res, next) => {
-  if (!req.file) return next(new ApiError(422, 'FILE_REQUIRED', '请选择封面图片'));
-  const storageKey = coverStorageKey(req.file);
-  res.status(201).json({
-    success: true,
-    data: {
-      url: `/media/${storageKey}`,
-      storageKey,
-      filename: req.file.originalname,
-      size: req.file.size
+router.post(
+  '/upload/cover',
+  requirePermission('projects'),
+  coverUpload.single('file'),
+  asyncRoute(async (req, res, next) => {
+    if (!req.file) return next(new ApiError(422, 'FILE_REQUIRED', '请选择封面图片'));
+    try {
+      const optimized = await optimizeCoverImage(req.file.path);
+      const storageKey = `covers/${optimized.filename}`;
+      const size = fs.statSync(resolveStoragePath(storageKey)).size;
+      res.status(201).json({
+        success: true,
+        data: {
+          url: optimized.urls.cover,
+          mediumUrl: optimized.urls.medium,
+          cardUrl: optimized.urls.card,
+          storageKey,
+          storagePaths: optimized.storagePaths,
+          filename: req.file.originalname,
+          size
+        }
+      });
+    } catch (error) {
+      console.error('封面图片处理失败:', error);
+      await removeStoredFile(coverStorageKey(req.file));
+      error.status = 422;
+      error.code = 'INVALID_COVER_IMAGE';
+      error.message = '封面图片无法解析，请上传有效的 JPG、PNG 或 WEBP 图片';
+      next(error);
     }
-  });
-});
+  })
+);
 
 router.post('/upload/widget-image', requirePermission('settings'), coverUpload.single('file'), (req, res, next) => {
   if (!req.file) return next(new ApiError(422, 'FILE_REQUIRED', '请选择二维码或管理员标识图片'));

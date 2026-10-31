@@ -2,7 +2,6 @@ import crypto from 'node:crypto';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import {
-  all,
   getSettings,
   nowIso,
   one,
@@ -18,6 +17,7 @@ import {
 import { resolveStoragePath, storageProvider } from '../services/storage.js';
 import { subscribeSiteUpdates } from '../services/events.js';
 import { mergeUiText } from '../content.js';
+import { getPublicSiteData } from '../services/site-data.js';
 import {
   ApiError,
   asyncRoute,
@@ -72,36 +72,10 @@ function todayDownloadCount(req) {
 }
 
 router.get('/bootstrap', (req, res) => {
-  const settings = getSettings();
-  const categories = all(`
-    SELECT id, name, description, sort_order
-    FROM categories WHERE active = 1 ORDER BY sort_order DESC, id ASC
-  `).map((row) => ({
-    id: row.id,
-    name: row.name,
-    description: row.description,
-    sortOrder: row.sort_order
-  }));
-  const projects = all(`${projectSelect()} WHERE p.published = 1 ORDER BY p.sort_weight DESC, p.id DESC`)
-    .map((row) => projectMeta(row));
-  const totalDownloads = Number(one(`
-    SELECT COUNT(*) AS count FROM analytics_events
-    WHERE event_type IN ('download_software', 'download_document')
-  `)?.count || 0);
-
   res.set('Cache-Control', 'no-store');
   res.json({
     success: true,
-    data: {
-      settings,
-      categories,
-      projects,
-      metrics: {
-        publishedProjects: projects.length,
-        categories: categories.length,
-        totalDownloads
-      }
-    }
+    data: getPublicSiteData()
   });
 });
 

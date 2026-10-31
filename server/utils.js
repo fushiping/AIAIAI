@@ -1,4 +1,5 @@
 import { all, parseJson } from './db.js';
+import { coverVariantUrl } from './services/storage.js';
 
 export class ApiError extends Error {
   constructor(status, code, message, details) {
@@ -82,6 +83,8 @@ export function projectMeta(row, includeFiles = false) {
     categoryId: row.category_id,
     categoryName: row.category_name || '未分类',
     coverUrl: row.cover_url,
+    coverMediumUrl: coverVariantUrl(row.cover_url, 'medium'),
+    coverCardUrl: coverVariantUrl(row.cover_url, 'card'),
     sortWeight: row.sort_weight,
     published: Boolean(row.published),
     createdAt: row.created_at,

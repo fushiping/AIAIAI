@@ -8,6 +8,7 @@ import { db } from './db.js';
 import publicRoutes from './routes/public.js';
 import adminRoutes from './routes/admin.js';
 import { seedDatabase } from './seed.js';
+import { getInitialSiteData } from './services/site-data.js';
 
 seedDatabase();
 
@@ -85,8 +86,19 @@ function sendHtmlWithBase(res, filePath, basePath) {
   res.type('html').send(html);
 }
 
+function sendPublicHtml(res) {
+  const serialized = Buffer
+    .from(JSON.stringify(getInitialSiteData()), 'utf8')
+    .toString('base64');
+  const html = fs.readFileSync(path.join(PUBLIC_DIR, 'index.html'), 'utf8')
+    .replaceAll('__APP_BASE__', APP_BASE_PATH)
+    .replaceAll('__INITIAL_SITE_DATA__', serialized);
+  res.set('Cache-Control', 'no-cache');
+  res.type('html').send(html);
+}
+
 app.get(['/', '/index.html'], (req, res) => {
-  sendHtmlWithBase(res, path.join(PUBLIC_DIR, 'index.html'), APP_BASE_PATH);
+  sendPublicHtml(res);
 });
 
 app.get(/^\/admin\/?$/, (req, res) => {

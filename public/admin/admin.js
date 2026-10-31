@@ -812,7 +812,7 @@ function projectTableRow(project) {
       <td class="table-checkbox"><input class="checkbox project-row-checkbox" type="checkbox" value="${project.id}" aria-label="选择 ${escapeHtml(project.name)}"></td>
       <td>
         <div class="project-table-name">
-          <span class="project-cover-thumb"><img src="${escapeHtml(appPath(project.coverUrl || '/assets/favicon.svg'))}" alt="" loading="lazy"></span>
+          <span class="project-cover-thumb"><img src="${escapeHtml(appPath(project.coverCardUrl || project.coverUrl || '/assets/favicon.svg'))}" alt="" loading="lazy" width="720" height="405" decoding="async"></span>
           <span class="table-cell-stack"><strong>${escapeHtml(project.name)}</strong><span>${escapeHtml(project.slogan)}</span></span>
         </div>
       </td>

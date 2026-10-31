@@ -16,8 +16,9 @@ export const PROJECT_FILE_TYPES = new Set([
 ]);
 
 export function resolveStoragePath(storageKey) {
-  const normalized = path.normalize(storageKey).replace(/^(\.\.(\/|\\|$))+/, '');
-  const base = normalized.startsWith('covers/') ? COVERS_DIR : FILES_DIR;
+  const normalized = String(storageKey || '').replaceAll('\\', '/');
+  const [storageType] = normalized.split('/');
+  const base = storageType === 'covers' ? COVERS_DIR : FILES_DIR;
   const filename = path.basename(normalized);
   const target = path.resolve(base, filename);
   if (!target.startsWith(path.resolve(base) + path.sep)) {
@@ -33,6 +34,13 @@ export async function removeStoredFile(storageKey) {
   } catch (error) {
     if (error.code !== 'ENOENT') console.error('删除文件失败:', error);
   }
+}
+
+export function coverVariantUrl(url, variant = 'card') {
+  const value = String(url || '');
+  if (!value.startsWith('/media/covers/') || !value.endsWith('.webp')) return value;
+  if (variant === 'cover') return value;
+  return value.replace(/\.webp$/, `.${variant}.webp`);
 }
 
 export function assertCoverType(file) {
