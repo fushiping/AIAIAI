@@ -98,7 +98,7 @@ app.use('/admin', express.static(path.join(PUBLIC_DIR, 'admin'), {
   dotfiles: 'deny',
   maxAge: isProduction ? '1h' : 0,
   setHeaders: (res, filePath) => {
-    if (filePath.endsWith('.html')) res.setHeader('Cache-Control', 'no-cache');
+    if (/\.(?:html|js|css)$/i.test(filePath)) res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('X-Content-Type-Options', 'nosniff');
   }
 }));
@@ -108,7 +108,7 @@ app.use(express.static(PUBLIC_DIR, {
   dotfiles: 'deny',
   maxAge: isProduction ? '1h' : 0,
   setHeaders: (res, filePath) => {
-    if (filePath.endsWith('.html')) res.setHeader('Cache-Control', 'no-cache');
+    if (/\.(?:html|js|css)$/i.test(filePath)) res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('X-Content-Type-Options', 'nosniff');
   }
 }));
