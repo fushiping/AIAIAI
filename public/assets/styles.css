@@ -2451,6 +2451,11 @@ button {
   color: var(--white);
 }
 
+.detail-button-link {
+  border-color: rgba(198, 161, 90, 0.5);
+  color: var(--gold-500);
+}
+
 .detail-button-contact:hover:not(:disabled) {
   border-color: var(--navy-800);
   background: var(--navy-800);
@@ -3320,7 +3325,7 @@ button {
 
   .detail-actions {
     display: grid;
-    grid-template-columns: 1.05fr 1fr 1fr;
+    grid-template-columns: 1.05fr 1fr 1fr 1fr;
     gap: 6px;
   }
 

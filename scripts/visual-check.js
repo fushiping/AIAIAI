@@ -143,7 +143,18 @@ try {
     }
     return 0;
   });
-  const detailProjectId = downloadableProjectId || await desktop.page.locator('[data-open-project]').first().getAttribute('data-open-project');
+  const linkedProjectId = await desktop.page.locator('.project-card:not(.skeleton-card)').evaluateAll((cards) => {
+    for (const card of cards) {
+      const linkStat = [...card.querySelectorAll('.card-file-stats span')]
+        .find((element) => element.textContent?.includes('链接'));
+      if (Number.parseInt(linkStat?.textContent || '0', 10) > 0) {
+        return Number(card.querySelector('[data-open-project]')?.dataset.openProject || 0);
+      }
+    }
+    return 0;
+  });
+  const detailProjectId = downloadableProjectId || linkedProjectId
+    || await desktop.page.locator('[data-open-project]').first().getAttribute('data-open-project');
   await desktop.page.locator(`[data-open-project="${detailProjectId}"]`).click();
   await desktop.page.locator('#projectDialog[open]').waitFor();
   const dialogScroll = await desktop.page.locator('#projectDialog .dialog-scroll').evaluate((element) => ({
@@ -154,6 +165,13 @@ try {
     throw new Error(`项目详情滚动区域检查失败：${JSON.stringify(dialogScroll)}`);
   }
   await desktop.page.screenshot({ path: path.join(OUTPUT_DIR, 'public-project-detail.png') });
+  if (linkedProjectId) {
+    const externalLinks = await desktop.page.locator('#detailFileList .file-download[target="_blank"]').count();
+    if (externalLinks < 1) throw new Error('前台项目详情未显示后台配置的外部链接');
+    if (await desktop.page.locator('#detailLinkButton').isDisabled()) {
+      throw new Error('前台项目详情的外部链接操作按钮未启用');
+    }
+  }
   if (downloadableProjectId) {
     const downloadPromise = desktop.page.waitForEvent('download');
     await desktop.page.locator('#detailDocumentButton').click();

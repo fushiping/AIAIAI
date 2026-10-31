@@ -88,7 +88,9 @@ function applyUiText() {
       'fileDialogTitle',
       state.filePickerType === 'software'
         ? uiText('detail.softwarePickerTitle')
-        : uiText('detail.documentPickerTitle')
+        : state.filePickerType === 'document'
+          ? uiText('detail.documentPickerTitle')
+          : uiText('detail.linkPickerTitle')
     );
   }
 }
@@ -121,27 +123,29 @@ async function loadSiteData() {
     projects: data.projects,
     metrics: data.metrics
   });
-  if (fingerprint === siteFingerprint) {
-    lastSiteSync = Date.now();
-    return false;
-  }
+  const changed = fingerprint !== siteFingerprint;
   siteFingerprint = fingerprint;
   lastSiteSync = Date.now();
-  state.settings = data.settings || {};
-  state.categories = data.categories || [];
-  state.projects = data.projects || [];
-  state.metrics = data.metrics || {};
-  if (
-    state.activeCategory !== 'all'
-    && !state.categories.some((category) => String(category.id) === String(state.activeCategory))
-  ) {
-    state.activeCategory = 'all';
+  if (changed) {
+    state.settings = data.settings || {};
+    state.categories = data.categories || [];
+    state.projects = data.projects || [];
+    state.metrics = data.metrics || {};
+    if (
+      state.activeCategory !== 'all'
+      && !state.categories.some((category) => String(category.id) === String(state.activeCategory))
+    ) {
+      state.activeCategory = 'all';
+    }
+    applySiteContent();
+    renderFeaturedProject();
+    renderCategories();
+    renderProjects();
   }
-  applySiteContent();
-  renderFeaturedProject();
-  renderCategories();
-  renderProjects();
-  return true;
+  if (byId('projectDialog')?.open && state.currentProject) {
+    await refreshOpenProjectDetail();
+  }
+  return changed;
 }
 
 async function syncSiteData() {
@@ -434,35 +438,7 @@ function renderProjects() {
 async function openProject(projectId) {
   try {
     const response = await api(`/api/public/projects/${projectId}`);
-    const project = response.data;
-    state.currentProject = project;
-    setText('detailCategory', project.categoryName);
-    setText('detailTitle', project.name);
-    setText('detailSlogan', project.slogan);
-    setText('detailDescription', project.description);
-
-    const cover = byId('detailCover');
-    cover.src = safeCover(project.coverUrl);
-    cover.alt = `${project.name}项目封面`;
-
-    const tags = byId('detailTags');
-    tags.replaceChildren();
-    (project.tags || []).forEach((tag) => {
-      const span = document.createElement('span');
-      span.textContent = tag;
-      tags.append(span);
-    });
-
-    const highlights = byId('detailHighlights');
-    highlights.replaceChildren();
-    (project.highlights || []).forEach((text) => {
-      const item = document.createElement('li');
-      item.textContent = text;
-      highlights.append(item);
-    });
-
-    renderDetailFiles(project);
-    updateDetailButtons(project);
+    const project = applyProjectDetail(response.data);
     const dialog = byId('projectDialog');
     if (!dialog.open) dialog.showModal();
     document.body.classList.add('dialog-open');
@@ -472,6 +448,49 @@ async function openProject(projectId) {
     }).catch(() => {});
   } catch (error) {
     toast(error.message || uiText('messages.detailLoadFailed'), 'error');
+  }
+}
+
+function applyProjectDetail(project) {
+  state.currentProject = project;
+  setText('detailCategory', project.categoryName);
+  setText('detailTitle', project.name);
+  setText('detailSlogan', project.slogan);
+  setText('detailDescription', project.description);
+
+  const cover = byId('detailCover');
+  cover.src = safeCover(project.coverUrl);
+  cover.alt = `${project.name}项目封面`;
+
+  const tags = byId('detailTags');
+  tags.replaceChildren();
+  (project.tags || []).forEach((tag) => {
+    const span = document.createElement('span');
+    span.textContent = tag;
+    tags.append(span);
+  });
+
+  const highlights = byId('detailHighlights');
+  highlights.replaceChildren();
+  (project.highlights || []).forEach((text) => {
+    const item = document.createElement('li');
+    item.textContent = text;
+    highlights.append(item);
+  });
+
+  renderDetailFiles(project);
+  updateDetailButtons(project);
+  return project;
+}
+
+async function refreshOpenProjectDetail() {
+  if (!state.currentProject) return;
+  try {
+    const response = await api(`/api/public/projects/${state.currentProject.id}`);
+    applyProjectDetail(response.data);
+  } catch {
+    byId('projectDialog')?.close();
+    state.currentProject = null;
   }
 }
 
@@ -534,16 +553,22 @@ function linkRowTemplate(link) {
 function updateDetailButtons(project) {
   const software = (project.files || []).filter((file) => file.type === 'software');
   const documents = (project.files || []).filter((file) => file.type === 'document');
+  const links = project.links || [];
   const softwareButton = byId('detailSoftwareButton');
   const documentButton = byId('detailDocumentButton');
+  const linkButton = byId('detailLinkButton');
   softwareButton.disabled = software.length === 0;
   documentButton.disabled = documents.length === 0;
+  linkButton.disabled = links.length === 0;
   softwareButton.querySelector('span').textContent = software.length > 1
     ? `${uiText('detail.softwareAction')} (${software.length})`
     : uiText('detail.softwareAction');
   documentButton.querySelector('span').textContent = documents.length > 1
     ? `${uiText('detail.documentAction')} (${documents.length})`
     : uiText('detail.documentAction');
+  linkButton.querySelector('span').textContent = links.length > 1
+    ? `${uiText('detail.linkAction')} (${links.length})`
+    : uiText('detail.linkAction');
 }
 
 function chooseFile(type) {
@@ -566,6 +591,35 @@ function chooseFile(type) {
   byId('filePickerList').innerHTML = files.map((file) => fileRowTemplate(file)).join('');
   if (!fileDialog.open) fileDialog.showModal();
   document.body.classList.add('dialog-open');
+}
+
+function chooseLink() {
+  const project = state.currentProject;
+  if (!project) return;
+  const links = project.links || [];
+  if (links.length === 0) return;
+  if (links.length > 1) {
+    const fileDialog = byId('fileDialog');
+    state.filePickerType = 'link';
+    setText('fileDialogTitle', uiText('detail.linkPickerTitle'));
+    byId('filePickerList').innerHTML = links.map((link) => linkRowTemplate(link)).join('');
+    if (!fileDialog.open) fileDialog.showModal();
+    document.body.classList.add('dialog-open');
+    return;
+  }
+  const url = safeExternalUrl(links[0].url);
+  if (!url) {
+    toast(uiText('messages.downloadUnavailable'), 'error');
+    return;
+  }
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.target = '_blank';
+  anchor.rel = 'noopener noreferrer';
+  anchor.style.display = 'none';
+  document.body.append(anchor);
+  anchor.click();
+  anchor.remove();
 }
 
 async function beginDownload(file, project = state.currentProject) {
@@ -719,6 +773,7 @@ function bindStaticEvents() {
   });
   byId('detailSoftwareButton')?.addEventListener('click', () => chooseFile('software'));
   byId('detailDocumentButton')?.addEventListener('click', () => chooseFile('document'));
+  byId('detailLinkButton')?.addEventListener('click', chooseLink);
 
   byId('detailFileList')?.addEventListener('click', (event) => {
     const button = event.target.closest('[data-download-file]');
