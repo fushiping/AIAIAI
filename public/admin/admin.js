@@ -1248,7 +1248,7 @@ async function openFileManager(projectId) {
     setText('fileManagerTitle', response.data.name);
     setText('fileManagerSubtitle', '管理软件、资料与外部跳转链接');
     byId('fileUploadForm').reset();
-    updateFileUploadMode();
+    byId('projectLinkForm').reset();
     renderAdminFileList();
     byId('fileManagerDialog').showModal();
     updateModalLock();
@@ -1334,48 +1334,9 @@ async function refreshFileProject() {
 
 function bindFileManagerEvents() {
   const form = byId('fileUploadForm');
-  form.elements.type.addEventListener('change', updateFileUploadMode);
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     if (!state.fileProject) return;
-    const type = form.elements.type.value;
-    if (type === 'link') {
-      const displayName = form.elements.displayName.value.trim();
-      const url = form.elements.linkUrl.value.trim();
-      if (!displayName) {
-        adminToast('请填写链接在前台显示的名称', 'error');
-        form.elements.displayName.focus();
-        return;
-      }
-      let parsedUrl;
-      try {
-        parsedUrl = new URL(url);
-      } catch {
-        adminToast('请填写完整的 http:// 或 https:// 链接', 'error');
-        form.elements.linkUrl.focus();
-        return;
-      }
-      if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
-        adminToast('链接仅支持 HTTP 或 HTTPS 地址', 'error');
-        return;
-      }
-      setButtonBusy(form, true);
-      try {
-        await adminApi(`/api/admin/projects/${state.fileProject.id}/links`, {
-          method: 'POST',
-          body: { displayName, url: parsedUrl.toString(), sortOrder: 0 }
-        });
-        await refreshFileProject();
-        form.reset();
-        updateFileUploadMode();
-        adminToast('跳转链接已添加，前台可立即访问', 'success');
-      } catch (error) {
-        adminToast(error.message || '链接添加失败', 'error');
-      } finally {
-        setButtonBusy(form, false);
-      }
-      return;
-    }
     const file = form.elements.file.files?.[0];
     if (!file) {
       adminToast('请选择要上传的文件', 'error');
@@ -1395,6 +1356,45 @@ function bindFileManagerEvents() {
       adminToast(error.message || '文件上传失败', 'error');
     } finally {
       setButtonBusy(form, false);
+    }
+  });
+
+  const linkForm = byId('projectLinkForm');
+  linkForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!state.fileProject) return;
+    const displayName = linkForm.elements.displayName.value.trim();
+    const url = linkForm.elements.url.value.trim();
+    if (!displayName) {
+      adminToast('请填写链接在前台显示的名称', 'error');
+      linkForm.elements.displayName.focus();
+      return;
+    }
+    let parsedUrl;
+    try {
+      parsedUrl = new URL(url);
+    } catch {
+      adminToast('请填写完整的 http:// 或 https:// 链接', 'error');
+      linkForm.elements.url.focus();
+      return;
+    }
+    if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
+      adminToast('链接仅支持 HTTP 或 HTTPS 地址', 'error');
+      return;
+    }
+    setButtonBusy(linkForm, true);
+    try {
+      await adminApi(`/api/admin/projects/${state.fileProject.id}/links`, {
+        method: 'POST',
+        body: { displayName, url: parsedUrl.toString(), sortOrder: 0 }
+      });
+      await refreshFileProject();
+      linkForm.reset();
+      adminToast('跳转链接已添加，前台可立即访问', 'success');
+    } catch (error) {
+      adminToast(error.message || '链接添加失败', 'error');
+    } finally {
+      setButtonBusy(linkForm, false);
     }
   });
 
@@ -1500,25 +1500,6 @@ function bindFileManagerEvents() {
       });
     }
   });
-}
-
-function updateFileUploadMode() {
-  const form = byId('fileUploadForm');
-  const isLink = form.elements.type.value === 'link';
-  byId('fileUploadInputField').hidden = isLink;
-  byId('fileUploadLinkField').hidden = !isLink;
-  byId('fileUploadLimits').hidden = isLink;
-  byId('fileUploadLinkHint').hidden = !isLink;
-  form.elements.file.required = !isLink;
-  form.elements.linkUrl.required = isLink;
-  form.elements.displayName.required = isLink;
-  form.elements.displayName.placeholder = isLink
-    ? '例如：在线演示、购买页面、项目官网'
-    : '不填则使用原文件名';
-  const label = form.querySelector('.button-label');
-  const loading = form.querySelector('.button-loading');
-  if (label) label.textContent = isLink ? '添加链接' : '上传文件';
-  if (loading) loading.textContent = isLink ? '正在添加...' : '上传中...';
 }
 
 function replaceProjectFile(file) {

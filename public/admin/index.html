@@ -293,7 +293,7 @@
           <span class="upload-icon">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m-4 4 4-4 4 4"/><path d="M5 20h14"/></svg>
           </span>
-          <div><strong>添加文件或跳转链接</strong><p>文件通过下载令牌发放，外部链接将在新页面直接打开</p></div>
+          <div><strong>上传项目文件</strong><p>文件会上传到受控目录，并通过下载令牌发放</p></div>
         </div>
         <div class="form-grid four">
           <label class="admin-field">
@@ -301,28 +301,45 @@
             <select name="type">
               <option value="software">软件安装包</option>
               <option value="document">项目资料</option>
-              <option value="link">外部链接跳转</option>
             </select>
           </label>
           <label class="admin-field">
             <span>前台展示名称</span>
             <input type="text" name="displayName" maxlength="180" placeholder="不填则使用原文件名">
           </label>
-          <label class="admin-field file-input-field" id="fileUploadInputField">
+          <label class="admin-field file-input-field">
             <span>选择文件</span>
             <input type="file" name="file" required>
-          </label>
-          <label class="admin-field" id="fileUploadLinkField" hidden>
-            <span>跳转链接 <b>*</b></span>
-            <input type="url" name="linkUrl" maxlength="2000" placeholder="https://example.com/project">
           </label>
           <button class="primary-button upload-button" type="submit">
             <span class="button-label">上传文件</span>
             <span class="button-loading" hidden>上传中...</span>
           </button>
         </div>
-        <p class="upload-limits" id="fileUploadLimits">支持 PDF、Office、TXT、ZIP/RAR/7Z、EXE、MSI、DMG、PKG，单文件最大 200MB。</p>
-        <p class="upload-limits" id="fileUploadLinkHint" hidden>仅支持公网 HTTP/HTTPS 地址，访客点击后将在新页面打开。</p>
+        <p class="upload-limits">支持 PDF、Office、TXT、ZIP/RAR/7Z、EXE、MSI、DMG、PKG，单文件最大 200MB。</p>
+      </form>
+      <form class="file-upload-panel link-upload-panel" id="projectLinkForm">
+        <div class="upload-panel-heading">
+          <span class="upload-icon link">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.2 1.2"/><path d="M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.2-1.2"/></svg>
+          </span>
+          <div><strong>添加外部链接</strong><p>访客点击后将在新页面直接打开该链接</p></div>
+        </div>
+        <div class="form-grid link-form-grid">
+          <label class="admin-field">
+            <span>前台展示名称 <b>*</b></span>
+            <input type="text" name="displayName" maxlength="120" placeholder="例如：在线演示 / 项目官网" required>
+          </label>
+          <label class="admin-field">
+            <span>跳转链接 URL <b>*</b></span>
+            <input type="url" name="url" maxlength="2000" placeholder="https://example.com/project" required>
+          </label>
+          <button class="primary-button upload-button" type="submit">
+            <span class="button-label">添加链接</span>
+            <span class="button-loading" hidden>正在添加...</span>
+          </button>
+        </div>
+        <p class="upload-limits">仅支持公网 HTTP / HTTPS 地址。</p>
       </form>
       <div class="file-manager-list-head">
         <div><h3>文件与外部链接</h3><p id="fileTotalText">共 0 个资源</p></div>
@@ -580,6 +597,6 @@
   </dialog>
 
   <div class="admin-toast-region" id="adminToastRegion" aria-live="polite" aria-atomic="true"></div>
-  <script type="module" src="admin.js"></script>
+  <script type="module" src="admin.js?v=20261031-link-form"></script>
 </body>
 </html>

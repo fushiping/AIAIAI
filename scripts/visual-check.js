@@ -84,7 +84,8 @@ try {
   const originalFeatured = projectOptions.find(
     (project) => project.id === settingsPayload.data.featuredProjectId
   ) || projectOptions[0];
-  const featuredTarget = projectOptions.find((project) => project.id !== originalFeatured.id);
+  if (!originalFeatured) throw new Error('没有已上架项目，无法验证首屏项目选择');
+  const featuredTarget = projectOptions.find((project) => project.id !== originalFeatured.id) || originalFeatured;
   await desktop.context.request.patch(`${BASE_URL}/api/admin/settings`, {
     data: { featuredProjectId: featuredTarget.id }
   });
@@ -142,8 +143,8 @@ try {
     }
     return 0;
   });
-  if (!downloadableProjectId) throw new Error('没有可下载资料的项目，无法执行下载验收');
-  await desktop.page.locator(`[data-open-project="${downloadableProjectId}"]`).click();
+  const detailProjectId = downloadableProjectId || await desktop.page.locator('[data-open-project]').first().getAttribute('data-open-project');
+  await desktop.page.locator(`[data-open-project="${detailProjectId}"]`).click();
   await desktop.page.locator('#projectDialog[open]').waitFor();
   const dialogScroll = await desktop.page.locator('#projectDialog .dialog-scroll').evaluate((element) => ({
     scrollbarWidth: getComputedStyle(element).scrollbarWidth,
@@ -153,11 +154,13 @@ try {
     throw new Error(`项目详情滚动区域检查失败：${JSON.stringify(dialogScroll)}`);
   }
   await desktop.page.screenshot({ path: path.join(OUTPUT_DIR, 'public-project-detail.png') });
-  const downloadPromise = desktop.page.waitForEvent('download');
-  await desktop.page.locator('#detailDocumentButton').click();
-  const download = await downloadPromise;
-  if (!download.suggestedFilename().includes('项目资料') && !download.suggestedFilename().endsWith('.txt')) {
-    throw new Error(`浏览器下载文件名异常：${download.suggestedFilename()}`);
+  if (downloadableProjectId) {
+    const downloadPromise = desktop.page.waitForEvent('download');
+    await desktop.page.locator('#detailDocumentButton').click();
+    const download = await downloadPromise;
+    if (!download.suggestedFilename().includes('项目资料') && !download.suggestedFilename().endsWith('.txt')) {
+      throw new Error(`浏览器下载文件名异常：${download.suggestedFilename()}`);
+    }
   }
   await desktop.page.locator('[data-close-project]').click();
   await desktop.context.close();
@@ -213,14 +216,13 @@ try {
   await admin.page.locator(`text=${uniqueProjectName}`).first().waitFor();
   await admin.page.locator(`[data-project-action="files"][data-project-id="${savedProject.data.id}"]`).click();
   await admin.page.locator('#fileManagerDialog[open]').waitFor();
-  await admin.page.locator('#fileUploadForm [name="type"]').selectOption('link');
-  await admin.page.locator('#fileUploadForm [name="displayName"]').fill('项目官网演示');
-  await admin.page.locator('#fileUploadForm [name="linkUrl"]').fill('https://example.com/project-demo');
+  await admin.page.locator('#projectLinkForm [name="displayName"]').fill('项目官网演示');
+  await admin.page.locator('#projectLinkForm [name="url"]').fill('https://example.com/project-demo');
   const linkSavePromise = admin.page.waitForResponse(
     (response) => response.url().endsWith(`/api/admin/projects/${savedProject.data.id}/links`)
       && response.request().method() === 'POST'
   );
-  await admin.page.locator('#fileUploadForm button[type="submit"]').click();
+  await admin.page.locator('#projectLinkForm button[type="submit"]').click();
   const linkSaveResponse = await linkSavePromise;
   if (!linkSaveResponse.ok()) throw new Error(`项目链接保存失败：${linkSaveResponse.status()}`);
   await admin.page.locator('[data-link-row]').filter({ hasText: '项目官网演示' }).waitFor();

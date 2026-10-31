@@ -2831,6 +2831,22 @@ svg {
   background: #fcfaf5;
 }
 
+.link-upload-panel {
+  margin-top: 10px;
+  border-color: #d8e3e9;
+  background: #f7fafb;
+}
+
+.upload-icon.link {
+  border-color: #d4e3ea;
+  color: var(--blue);
+}
+
+.link-form-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) auto;
+  align-items: end;
+}
+
 .upload-panel-heading {
   display: flex;
   align-items: center;
@@ -3610,6 +3626,10 @@ svg {
   }
 
   .form-grid.four {
+    grid-template-columns: 1fr;
+  }
+
+  .link-form-grid {
     grid-template-columns: 1fr;
   }
 
