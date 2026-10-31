@@ -4,8 +4,8 @@
 
 ## 在线地址
 
-- 访客端：https://www.yijianbaowen.cn/vip/
-- 管理后台：https://www.yijianbaowen.cn/vip/admin/
+- 访客端：https://123mrfu.vip/
+- 管理后台：https://123mrfu.vip/admin/
 - 源码仓库：https://github.com/fushiping/AIAIAI
 
 ## 已实现能力
@@ -55,7 +55,7 @@ npm start
 - 访客端：`http://127.0.0.1:18930/`
 - 管理后台：`http://127.0.0.1:18930/admin/`
 
-当前工作目录中的 `.env` 因本机 `18930` 已被其他服务占用，配置为 `18931`：
+本地开发环境可使用 `.env` 配置端口；当前本机 `18930` 已被其他服务占用，因此示例配置为 `18931`：
 
 - 访客端：`http://127.0.0.1:18931/`
 - 管理后台：`http://127.0.0.1:18931/admin/`

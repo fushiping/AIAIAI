@@ -10,3 +10,4 @@ test-output/
 coverage/
 release.tar.gz
 runtime-data.tar.gz
+runtime-newserver.tar.gz

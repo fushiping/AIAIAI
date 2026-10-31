@@ -38,6 +38,7 @@ try {
   const desktop = await createPage({ width: 1440, height: 1050 });
   await desktop.page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
   await desktop.page.locator('.project-card:not(.skeleton-card)').first().waitFor();
+  await desktop.page.waitForFunction(() => document.documentElement.dataset.liveStatus === 'connected');
   await desktop.page.screenshot({ path: path.join(OUTPUT_DIR, 'public-desktop.png') });
   await desktop.page.locator('#floatingContactButton').waitFor({ state: 'visible' });
   const floatingPosition = await desktop.page.locator('#floatingContactButton').evaluate(
@@ -46,8 +47,12 @@ try {
   if (floatingPosition !== 'fixed') throw new Error('联系浮标未固定定位');
   await desktop.page.locator('#floatingContactButton').click();
   await desktop.page.locator('#contactQrDialog[open]').waitFor();
+  await desktop.page.waitForFunction(() => {
+    const image = document.querySelector('#floatingContactQr');
+    return image?.naturalWidth > 0 && image.naturalHeight > 0;
+  }, null, { timeout: 15000 });
   const qrLoaded = await desktop.page.locator('#floatingContactQr').evaluate(
-    (image) => image.complete && image.naturalWidth > 0
+    (image) => image.naturalWidth > 0 && image.naturalHeight > 0
   );
   if (!qrLoaded) throw new Error('联系二维码弹窗图片未加载');
   await desktop.page.screenshot({ path: path.join(OUTPUT_DIR, 'public-contact-qr.png') });

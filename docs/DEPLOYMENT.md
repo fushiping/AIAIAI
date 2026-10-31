@@ -2,13 +2,13 @@
 
 ## 当前线上实例
 
-- 地址：`https://www.yijianbaowen.cn/vip/`
-- 管理后台：`https://www.yijianbaowen.cn/vip/admin/`
-- 应用目录：`/opt/fushi-ai-vip`
-- systemd 服务：`fushi-ai-vip`
-- 内部端口：`127.0.0.1:4176`
-- Nginx 子路径：`/vip/`
-- 运行数据：`/opt/fushi-ai-vip/data`、`/opt/fushi-ai-vip/storage`
+- 地址：`https://123mrfu.vip/`
+- 管理后台：`https://123mrfu.vip/admin/`
+- 应用目录：`/opt/123mrfu-vip`
+- systemd 服务：`123mrfu-vip`
+- 内部端口：`127.0.0.1:4180`
+- 反向代理：Caddy 自动 HTTPS，独立站点 `123mrfu.vip`
+- 运行数据：`/opt/123mrfu-vip/data`、`/opt/123mrfu-vip/storage`
 
 ## 1. 运行环境
 

@@ -160,9 +160,16 @@ async function syncSiteData() {
 function connectLiveUpdates() {
   if (!('EventSource' in window)) return;
   const source = new EventSource(appPath('/api/public/events'));
+  source.addEventListener('connected', () => {
+    document.documentElement.dataset.liveStatus = 'connected';
+    syncSiteData();
+  });
   source.addEventListener('site-update', () => {
     window.clearTimeout(liveSyncTimer);
     liveSyncTimer = window.setTimeout(() => syncSiteData(), 120);
+  });
+  source.addEventListener('error', () => {
+    document.documentElement.dataset.liveStatus = 'reconnecting';
   });
 }
 
