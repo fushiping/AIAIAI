@@ -60,14 +60,13 @@ npm start
 - 访客端：`http://127.0.0.1:18931/`
 - 管理后台：`http://127.0.0.1:18931/admin/`
 
-首次启动会创建示例分类、项目、可下载演示文件和总管理员：
+首次启动会创建示例分类、项目、可下载演示文件和总管理员。管理员账号与初始密码从 `.env` 的 `ADMIN_USERNAME`、`ADMIN_PASSWORD` 读取，请在上线前设置强密码。
 
-```text
-账号：admin
-密码：FushiVIP@2026
+数据库已存在时，修改 `.env` 不会重置已有账号。需要恢复总管理员密码时，在服务器项目目录执行：
+
+```bash
+npm run admin:reset -- 新账号 '新密码'
 ```
-
-登录后请立即通过右上角账号菜单修改密码。数据库已存在时，修改 `.env` 中的管理员账号或密码不会重置已有账号。
 
 ## 配置
 
@@ -80,7 +79,7 @@ npm start
 | `PUBLIC_ORIGIN` | 空 | 正式站点 Origin，如 `https://vip.example.com` |
 | `TRUST_PROXY` | `0` | 经 Nginx 等反向代理时设置为 `1` |
 | `ADMIN_USERNAME` | `admin` | 仅在首次初始化数据库时使用 |
-| `ADMIN_PASSWORD` | `FushiVIP@2026` | 仅首次初始化时使用，正式环境务必替换 |
+| `ADMIN_PASSWORD` | 必须设置 | 仅首次初始化数据库时使用，正式环境务必使用强密码 |
 | `ADMIN_DISPLAY_NAME` | `超级管理员` | 总管理员显示名称 |
 | `JWT_SECRET` | 自动生成 | 可显式配置；留空时保存到 `data/.jwt-secret` |
 | `SESSION_HOURS` | `12` | 后台登录有效期 |

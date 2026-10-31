@@ -10,9 +10,10 @@
   "scripts": {
     "start": "node server/index.js",
     "dev": "node --watch server/index.js",
+    "admin:reset": "node scripts/reset-admin.js",
     "test:smoke": "node scripts/smoke-test.js",
     "test:visual": "node scripts/visual-check.js",
-    "check": "node --check server/index.js && node --check server/routes/admin.js && node --check server/routes/public.js && node --check public/assets/api.js && node --check public/assets/app.js && node --check public/assets/404.js && node --check public/admin/admin.js && node scripts/content-check.js"
+    "check": "node --check server/index.js && node --check server/routes/admin.js && node --check server/routes/public.js && node --check public/assets/api.js && node --check public/assets/app.js && node --check public/assets/404.js && node --check public/admin/admin.js && node --check scripts/reset-admin.js && node scripts/content-check.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
