@@ -293,7 +293,7 @@
           <span class="upload-icon">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m-4 4 4-4 4 4"/><path d="M5 20h14"/></svg>
           </span>
-          <div><strong>上传新文件</strong><p>文件会上传到受控目录，并通过下载令牌发放</p></div>
+          <div><strong>添加文件或跳转链接</strong><p>文件通过下载令牌发放，外部链接将在新页面直接打开</p></div>
         </div>
         <div class="form-grid four">
           <label class="admin-field">
@@ -301,33 +301,39 @@
             <select name="type">
               <option value="software">软件安装包</option>
               <option value="document">项目资料</option>
+              <option value="link">外部链接跳转</option>
             </select>
           </label>
           <label class="admin-field">
             <span>前台展示名称</span>
             <input type="text" name="displayName" maxlength="180" placeholder="不填则使用原文件名">
           </label>
-          <label class="admin-field file-input-field">
+          <label class="admin-field file-input-field" id="fileUploadInputField">
             <span>选择文件</span>
             <input type="file" name="file" required>
+          </label>
+          <label class="admin-field" id="fileUploadLinkField" hidden>
+            <span>跳转链接 <b>*</b></span>
+            <input type="url" name="linkUrl" maxlength="2000" placeholder="https://example.com/project">
           </label>
           <button class="primary-button upload-button" type="submit">
             <span class="button-label">上传文件</span>
             <span class="button-loading" hidden>上传中...</span>
           </button>
         </div>
-        <p class="upload-limits">支持 PDF、Office、TXT、ZIP/RAR/7Z、EXE、MSI、DMG、PKG，单文件最大 200MB。</p>
+        <p class="upload-limits" id="fileUploadLimits">支持 PDF、Office、TXT、ZIP/RAR/7Z、EXE、MSI、DMG、PKG，单文件最大 200MB。</p>
+        <p class="upload-limits" id="fileUploadLinkHint" hidden>仅支持公网 HTTP/HTTPS 地址，访客点击后将在新页面打开。</p>
       </form>
       <div class="file-manager-list-head">
-        <div><h3>已上传文件</h3><p id="fileTotalText">共 0 个文件</p></div>
-        <span>文件名称可直接修改</span>
+        <div><h3>文件与外部链接</h3><p id="fileTotalText">共 0 个资源</p></div>
+        <span>文件支持替换和改名，链接支持编辑</span>
       </div>
       <div class="admin-file-list" id="adminFileList">
         <div class="table-empty compact">正在加载文件...</div>
       </div>
     </div>
     <div class="dialog-footer">
-      <span class="dialog-footer-note">文件替换后，原下载链接自动失效。</span>
+      <span class="dialog-footer-note">文件替换或链接修改后，前台入口即时更新。</span>
       <button class="secondary-button" type="button" data-close-dialog="fileManagerDialog">完成</button>
     </div>
   </dialog>

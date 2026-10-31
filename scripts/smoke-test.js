@@ -4,9 +4,9 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const BASE_URL = process.env.TEST_BASE_URL || 'http://127.0.0.1:18931';
-const ADMIN_USERNAME = process.env.TEST_ADMIN_USERNAME || 'admin';
-const ADMIN_PASSWORD = process.env.TEST_ADMIN_PASSWORD || 'FushiVIP@2026';
+const BASE_URL = (process.env.TEST_BASE_URL || process.argv[2] || 'http://127.0.0.1:18931').replace(/\/$/, '');
+const ADMIN_USERNAME = process.env.TEST_ADMIN_USERNAME || process.argv[3] || 'admin';
+const ADMIN_PASSWORD = process.env.TEST_ADMIN_PASSWORD || process.argv[4] || 'FushiVIP@2026';
 
 class ApiClient {
   constructor() {
@@ -74,6 +74,7 @@ const admin = new ApiClient();
 const publicClient = new ApiClient();
 let projectId = null;
 let fileId = null;
+let linkId = null;
 let inquiryId = null;
 let categoryId = null;
 let childAdminId = null;
@@ -244,6 +245,26 @@ try {
   assert.equal(replacedProject.data.files[0].displayName, '替换后的验收资料.txt');
   pass('项目文件替换与展示名保留');
 
+  const link = await admin.json(`/api/admin/projects/${projectId}/links`, {
+    method: 'POST',
+    json: {
+      displayName: '项目在线演示',
+      url: 'https://example.com/project-demo',
+      sortOrder: 1
+    }
+  });
+  linkId = link.data.id;
+  const invalidLink = await admin.request(`/api/admin/links/${linkId}`, {
+    method: 'PATCH',
+    json: { url: 'javascript:alert(1)' }
+  });
+  assert.equal(invalidLink.response.status, 422);
+  await admin.json(`/api/admin/links/${linkId}`, {
+    method: 'PATCH',
+    json: { displayName: '项目在线演示入口', url: 'https://example.com/project-demo?v=2' }
+  });
+  pass('项目外链新增、地址校验与编辑');
+
   await admin.json('/api/admin/projects/batch', {
     method: 'POST',
     json: { ids: [projectId], action: 'unpublish' }
@@ -259,6 +280,8 @@ try {
   const publicDetail = await publicClient.json(`/api/public/projects/${projectId}`);
   assert.equal(publicDetail.data.files.length, 1);
   assert.equal(publicDetail.data.files[0].displayName, '替换后的验收资料.txt');
+  assert.equal(publicDetail.data.links.length, 1);
+  assert.equal(publicDetail.data.links[0].displayName, '项目在线演示入口');
   pass('访客项目详情返回后台最新内容与文件');
 
   const projectOptions = await admin.json('/api/admin/project-options');
@@ -427,6 +450,7 @@ try {
   await admin.json(`/api/admin/projects/${projectId}`, { method: 'DELETE' });
   projectId = null;
   fileId = null;
+  linkId = null;
   pass('项目删除及关联文件清理');
 
   await admin.json(`/api/admin/categories/${categoryId}`, { method: 'DELETE' });

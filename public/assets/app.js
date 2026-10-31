@@ -16,7 +16,8 @@ let liveSyncTimer = null;
 
 const fileIcons = {
   software: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4"/><path d="M5 19h14"/></svg>',
-  document: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6V3Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>'
+  document: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6V3Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>',
+  link: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.2 1.2"/><path d="M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.2-1.2"/></svg>'
 };
 
 function byId(id) {
@@ -41,6 +42,15 @@ function renderMultiline(element, value) {
 function safeCover(value) {
   const url = String(value || '');
   return url.startsWith('/') && !url.startsWith('//') ? appPath(url) : appPath('/assets/favicon.svg');
+}
+
+function safeExternalUrl(value) {
+  try {
+    const parsed = new URL(String(value || ''));
+    return ['http:', 'https:'].includes(parsed.protocol) ? parsed.href : '';
+  } catch {
+    return '';
+  }
 }
 
 function uiText(key, fallback = '') {
@@ -403,6 +413,12 @@ function renderProjects() {
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6V3Z"/><path d="M14 3v5h5"/></svg>
                 ${project.documentCount || 0} ${escapeHtml(uiText('projects.documentUnit'))}
               </span>
+              ${project.linkCount > 0 ? `
+                <span>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.2 1.2"/><path d="M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.2-1.2"/></svg>
+                  ${project.linkCount} ${escapeHtml(uiText('projects.linkUnit'))}
+                </span>
+              ` : ''}
             </div>
             <button class="card-view-button" type="button" data-open-project="${project.id}">
               <span>${escapeHtml(uiText('projects.cardAction'))}</span>
@@ -462,12 +478,17 @@ async function openProject(projectId) {
 function renderDetailFiles(project) {
   const list = byId('detailFileList');
   const files = project.files || [];
-  setText('detailFileCount', `${files.length} ${uiText('detail.fileCountSuffix')}`);
-  if (files.length === 0) {
+  const links = project.links || [];
+  setText(
+    'detailFileCount',
+    `${files.length} ${uiText('detail.fileCountSuffix')} · ${links.length} ${uiText('detail.linkCountSuffix')}`
+  );
+  if (files.length === 0 && links.length === 0) {
     list.innerHTML = `<div class="file-empty">${escapeHtml(uiText('detail.noFiles'))}</div>`;
     return;
   }
-  list.innerHTML = files.map((file) => fileRowTemplate(file)).join('');
+  list.innerHTML = files.map((file) => fileRowTemplate(file)).join('')
+    + links.map((link) => linkRowTemplate(link)).join('');
 }
 
 function fileRowTemplate(file) {
@@ -482,6 +503,30 @@ function fileRowTemplate(file) {
         <span>${escapeHtml(uiText('detail.downloadAction'))}</span>
         ${fileIcons.software}
       </button>
+    </div>
+  `;
+}
+
+function linkRowTemplate(link) {
+  const url = safeExternalUrl(link.url);
+  if (!url) return '';
+  let host = url;
+  try {
+    host = new URL(url).hostname;
+  } catch {
+    // safeExternalUrl 已校验，这里仅用于展示域名。
+  }
+  return `
+    <div class="file-row">
+      <span class="file-icon">${fileIcons.link}</span>
+      <span class="file-info">
+        <strong title="${escapeHtml(link.displayName)}">${escapeHtml(link.displayName)}</strong>
+        <span>${escapeHtml(uiText('detail.linkType'))} · ${escapeHtml(host)}</span>
+      </span>
+      <a class="file-download" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">
+        <span>${escapeHtml(uiText('detail.linkAction'))}</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 13v7H4V6h7"/></svg>
+      </a>
     </div>
   `;
 }

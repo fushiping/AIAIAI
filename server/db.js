@@ -66,6 +66,17 @@ db.exec(`
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
   );
 
+  CREATE TABLE IF NOT EXISTS project_links (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    project_id INTEGER NOT NULL,
+    display_name TEXT NOT NULL,
+    url TEXT NOT NULL,
+    sort_order INTEGER NOT NULL DEFAULT 0,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+  );
+
   CREATE TABLE IF NOT EXISTS inquiries (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
@@ -119,6 +130,7 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_projects_category ON projects(category_id);
   CREATE INDEX IF NOT EXISTS idx_projects_published_sort ON projects(published, sort_weight DESC);
   CREATE INDEX IF NOT EXISTS idx_files_project ON project_files(project_id);
+  CREATE INDEX IF NOT EXISTS idx_links_project ON project_links(project_id, sort_order);
   CREATE INDEX IF NOT EXISTS idx_inquiries_created ON inquiries(created_at DESC);
   CREATE INDEX IF NOT EXISTS idx_inquiries_status ON inquiries(status, is_read);
   CREATE INDEX IF NOT EXISTS idx_events_created ON analytics_events(created_at);

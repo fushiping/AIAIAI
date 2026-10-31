@@ -47,6 +47,7 @@ import {
   cleanStringList,
   fileMeta,
   getRangeDays,
+  linkMeta,
   parseId,
   projectMeta,
   projectSelect,
@@ -162,6 +163,32 @@ function normalizeProjectBody(body, existing = null) {
     coverUrl,
     sortWeight,
     published
+  };
+}
+
+function normalizeProjectLink(body, existing = null) {
+  const displayName = cleanString(body.displayName ?? existing?.display_name, 120);
+  const rawUrl = cleanString(body.url ?? existing?.url, 2000);
+  const sortOrder = Number.parseInt(body.sortOrder ?? existing?.sort_order ?? 0, 10);
+  if (displayName.length < 1) {
+    throw new ApiError(422, 'INVALID_LINK_NAME', '请填写链接在前台展示的名称');
+  }
+  let parsed;
+  try {
+    parsed = new URL(rawUrl);
+  } catch {
+    throw new ApiError(422, 'INVALID_LINK_URL', '请填写完整的 http:// 或 https:// 链接');
+  }
+  if (!['http:', 'https:'].includes(parsed.protocol) || parsed.username || parsed.password) {
+    throw new ApiError(422, 'INVALID_LINK_URL', '链接仅支持公开的 HTTP 或 HTTPS 地址');
+  }
+  if (!Number.isFinite(sortOrder) || sortOrder < -9999 || sortOrder > 9999) {
+    throw new ApiError(422, 'INVALID_LINK_SORT', '链接排序必须是 -9999 到 9999 之间的整数');
+  }
+  return {
+    displayName,
+    url: parsed.toString(),
+    sortOrder
   };
 }
 
@@ -543,6 +570,55 @@ router.post('/upload/widget-image', requirePermission('settings'), coverUpload.s
       size: req.file.size
     }
   });
+});
+
+router.post('/projects/:projectId/links', requirePermission('projects'), (req, res, next) => {
+  const projectId = parseId(req.params.projectId);
+  if (!projectId || !one('SELECT id FROM projects WHERE id = ?', [projectId])) {
+    return next(new ApiError(404, 'PROJECT_NOT_FOUND', '项目不存在'));
+  }
+  let data;
+  try {
+    data = normalizeProjectLink(req.body);
+  } catch (error) {
+    return next(error);
+  }
+  const timestamp = nowIso();
+  const result = run(`
+    INSERT INTO project_links (project_id, display_name, url, sort_order, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `, [projectId, data.displayName, data.url, data.sortOrder, timestamp, timestamp]);
+  const link = one('SELECT * FROM project_links WHERE id = ?', [Number(result.lastInsertRowid)]);
+  broadcastSiteUpdate('project-link-created');
+  res.status(201).json({ success: true, data: linkMeta(link) });
+});
+
+router.patch('/links/:id', requirePermission('projects'), (req, res, next) => {
+  const id = parseId(req.params.id);
+  const existing = id ? one('SELECT * FROM project_links WHERE id = ?', [id]) : null;
+  if (!existing) return next(new ApiError(404, 'LINK_NOT_FOUND', '链接不存在'));
+  let data;
+  try {
+    data = normalizeProjectLink(req.body, existing);
+  } catch (error) {
+    return next(error);
+  }
+  run(`
+    UPDATE project_links
+    SET display_name = ?, url = ?, sort_order = ?, updated_at = ?
+    WHERE id = ?
+  `, [data.displayName, data.url, data.sortOrder, nowIso(), id]);
+  const link = one('SELECT * FROM project_links WHERE id = ?', [id]);
+  broadcastSiteUpdate('project-link-updated');
+  res.json({ success: true, data: linkMeta(link) });
+});
+
+router.delete('/links/:id', requirePermission('projects'), (req, res, next) => {
+  const id = parseId(req.params.id);
+  const result = run('DELETE FROM project_links WHERE id = ?', [id || 0]);
+  if (Number(result.changes) === 0) return next(new ApiError(404, 'LINK_NOT_FOUND', '链接不存在'));
+  broadcastSiteUpdate('project-link-deleted');
+  res.json({ success: true });
 });
 
 router.post('/projects/:projectId/files', requirePermission('projects'), projectFileUpload.single('file'), (req, res, next) => {

@@ -61,6 +61,7 @@ export const UI_TEXT_SCHEMA = [
       field('projects.cardAction', '项目卡片按钮', { max: 30 }),
       field('projects.softwareUnit', '软件数量单位', { max: 20 }),
       field('projects.documentUnit', '资料数量单位', { max: 20 }),
+      field('projects.linkUnit', '链接数量单位', { max: 20 }),
       field('projects.cardPrefix', '卡片英文前缀', { max: 30 }),
       field('projects.emptyTitle', '无项目标题', { max: 100 }),
       field('projects.emptyDesc', '无项目说明', { type: 'textarea', max: 300 })
@@ -117,6 +118,7 @@ export const UI_TEXT_SCHEMA = [
       field('detail.filesTitle', '文件区标题', { max: 40 }),
       field('detail.filesDescription', '文件区说明', { type: 'textarea', max: 240 }),
       field('detail.fileCountSuffix', '文件数量后缀', { max: 20 }),
+      field('detail.linkCountSuffix', '链接数量后缀', { max: 20 }),
       field('detail.noFiles', '无文件说明', { type: 'textarea', max: 240 }),
       field('detail.footnote', '详情底部说明', { type: 'textarea', max: 300 }),
       field('detail.actionEyebrow', '操作区提示', { max: 50 }),
@@ -129,6 +131,8 @@ export const UI_TEXT_SCHEMA = [
       field('detail.documentPickerTitle', '资料选择标题', { max: 50 }),
       field('detail.fileTypeSoftware', '软件文件类型名', { max: 30 }),
       field('detail.fileTypeDocument', '资料文件类型名', { max: 30 }),
+      field('detail.linkType', '外链文件类型名', { max: 30 }),
+      field('detail.linkAction', '外链访问按钮', { max: 30 }),
       field('detail.downloadAction', '单个文件下载按钮', { max: 30 })
     ]
   },
@@ -242,6 +246,7 @@ export const UI_TEXT_DEFAULTS = Object.freeze({
   'projects.cardAction': '查看详情',
   'projects.softwareUnit': '软件',
   'projects.documentUnit': '资料',
+  'projects.linkUnit': '链接',
   'projects.cardPrefix': 'PROJECT',
   'projects.emptyTitle': '这个分类暂时没有上架项目',
   'projects.emptyDesc': '可以切换其他分类，或直接提交合作需求了解可对接的项目方向。',
@@ -280,7 +285,8 @@ export const UI_TEXT_DEFAULTS = Object.freeze({
   'detail.filesTitle': '可下载资料',
   'detail.filesDescription': '文件由平台统一维护，点击即可按下载规则获取。',
   'detail.fileCountSuffix': '个文件',
-  'detail.noFiles': '该项目暂未上传文件，你可以通过合作咨询了解详细交付资料。',
+  'detail.linkCountSuffix': '个链接',
+  'detail.noFiles': '该项目暂未上传文件或添加跳转链接，你可以通过合作咨询了解详细交付资料。',
   'detail.footnote': '项目信息与文件由运营后台实时维护，合作范围以双方最终确认的方案为准。',
   'detail.actionEyebrow': '对项目感兴趣？',
   'detail.actionTitle': '先沟通，再选择最合适的合作方式',
@@ -292,6 +298,8 @@ export const UI_TEXT_DEFAULTS = Object.freeze({
   'detail.documentPickerTitle': '选择项目资料',
   'detail.fileTypeSoftware': '软件包',
   'detail.fileTypeDocument': '项目资料',
+  'detail.linkType': '跳转链接',
+  'detail.linkAction': '立即访问',
   'detail.downloadAction': '下载',
 
   'lead.kicker': 'DOWNLOAD ACCESS',

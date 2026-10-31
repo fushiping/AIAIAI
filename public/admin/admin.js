@@ -144,11 +144,12 @@ function confirmAction({ title, text, confirmLabel = '确认删除', callback })
   updateModalLock();
 }
 
-function promptAction({ title, label, value, confirmLabel = '确认修改', callback }) {
+function promptAction({ title, label, value, confirmLabel = '确认修改', maxLength = 180, callback }) {
   const form = byId('promptForm');
   form.reset();
   setText('promptDialogTitle', title);
   setText('promptDialogLabel', label);
+  form.elements.value.maxLength = maxLength;
   form.elements.value.value = value || '';
   form.querySelector('button[type="submit"]').textContent = confirmLabel;
   state.promptCallback = callback;
@@ -821,7 +822,7 @@ function projectTableRow(project) {
           <div class="mini-tags">${(project.tags || []).slice(0, 3).map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}</div>
         </div>
       </td>
-      <td><div class="file-count-badge"><span>软件 ${project.softwareCount}</span><span>资料 ${project.documentCount}</span></div></td>
+      <td><div class="file-count-badge"><span>软件 ${project.softwareCount}</span><span>资料 ${project.documentCount}</span><span>链接 ${project.linkCount || 0}</span></div></td>
       <td>${project.sortWeight}</td>
       <td>
         <label class="switch-control" title="切换上架状态">
@@ -1245,8 +1246,9 @@ async function openFileManager(projectId) {
     const response = await adminApi(`/api/admin/projects/${projectId}`);
     state.fileProject = response.data;
     setText('fileManagerTitle', response.data.name);
-    setText('fileManagerSubtitle', '管理软件安装包与资料文件');
+    setText('fileManagerSubtitle', '管理软件、资料与外部跳转链接');
     byId('fileUploadForm').reset();
+    updateFileUploadMode();
     renderAdminFileList();
     byId('fileManagerDialog').showModal();
     updateModalLock();
@@ -1259,13 +1261,14 @@ function renderAdminFileList() {
   const project = state.fileProject;
   if (!project) return;
   const files = project.files || [];
-  setText('fileTotalText', `共 ${files.length} 个文件`);
+  const links = project.links || [];
+  setText('fileTotalText', `共 ${files.length + links.length} 个资源（文件 ${files.length} · 链接 ${links.length}）`);
   const list = byId('adminFileList');
-  if (files.length === 0) {
-    list.innerHTML = '<div class="table-empty compact">该项目还没有文件。可上传软件安装包或资料文档供访客下载。</div>';
+  if (files.length === 0 && links.length === 0) {
+    list.innerHTML = '<div class="table-empty compact">该项目还没有资源。可上传软件安装包、资料文档，或添加外部跳转链接。</div>';
     return;
   }
-  list.innerHTML = files.map((file) => `
+  const fileRows = files.map((file) => `
     <div class="admin-file-row" data-file-row="${file.id}">
       <div class="admin-file-main">
         <span class="admin-file-icon">
@@ -1289,6 +1292,37 @@ function renderAdminFileList() {
       </div>
     </div>
   `).join('');
+  const linkRows = links.map((link) => {
+    let host = '外部链接';
+    try {
+      host = new URL(link.url).hostname;
+    } catch {
+      // 无效历史数据仍可在后台删除或修正。
+    }
+    return `
+      <div class="admin-file-row" data-link-row="${link.id}">
+        <div class="admin-file-main">
+          <span class="admin-file-icon link">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.2 1.2"/><path d="M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.2-1.2"/></svg>
+          </span>
+          <span class="table-cell-stack">
+            <strong title="${escapeHtml(link.displayName)}">${escapeHtml(link.displayName)}</strong>
+            <span title="${escapeHtml(link.url)}">${escapeHtml(link.url)}</span>
+          </span>
+        </div>
+        <span class="type-pill link">外部链接</span>
+        <span class="muted-text">${escapeHtml(host)}</span>
+        <span class="status-pill published">可跳转</span>
+        <div class="file-row-actions">
+          <a class="action-link" href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer">访问</a>
+          <button class="action-link" type="button" data-link-action="rename" data-link-id="${link.id}">名称</button>
+          <button class="action-link" type="button" data-link-action="url" data-link-id="${link.id}">地址</button>
+          <button class="action-link danger" type="button" data-link-action="delete" data-link-id="${link.id}">删除</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+  list.innerHTML = fileRows + linkRows;
 }
 
 async function refreshFileProject() {
@@ -1300,9 +1334,48 @@ async function refreshFileProject() {
 
 function bindFileManagerEvents() {
   const form = byId('fileUploadForm');
+  form.elements.type.addEventListener('change', updateFileUploadMode);
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     if (!state.fileProject) return;
+    const type = form.elements.type.value;
+    if (type === 'link') {
+      const displayName = form.elements.displayName.value.trim();
+      const url = form.elements.linkUrl.value.trim();
+      if (!displayName) {
+        adminToast('请填写链接在前台显示的名称', 'error');
+        form.elements.displayName.focus();
+        return;
+      }
+      let parsedUrl;
+      try {
+        parsedUrl = new URL(url);
+      } catch {
+        adminToast('请填写完整的 http:// 或 https:// 链接', 'error');
+        form.elements.linkUrl.focus();
+        return;
+      }
+      if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
+        adminToast('链接仅支持 HTTP 或 HTTPS 地址', 'error');
+        return;
+      }
+      setButtonBusy(form, true);
+      try {
+        await adminApi(`/api/admin/projects/${state.fileProject.id}/links`, {
+          method: 'POST',
+          body: { displayName, url: parsedUrl.toString(), sortOrder: 0 }
+        });
+        await refreshFileProject();
+        form.reset();
+        updateFileUploadMode();
+        adminToast('跳转链接已添加，前台可立即访问', 'success');
+      } catch (error) {
+        adminToast(error.message || '链接添加失败', 'error');
+      } finally {
+        setButtonBusy(form, false);
+      }
+      return;
+    }
     const file = form.elements.file.files?.[0];
     if (!file) {
       adminToast('请选择要上传的文件', 'error');
@@ -1326,6 +1399,61 @@ function bindFileManagerEvents() {
   });
 
   byId('adminFileList').addEventListener('click', (event) => {
+    const linkButton = event.target.closest('[data-link-action]');
+    if (linkButton && state.fileProject) {
+      const link = state.fileProject.links?.find((item) => item.id === Number(linkButton.dataset.linkId));
+      if (!link) return;
+      const action = linkButton.dataset.linkAction;
+      if (action === 'rename') {
+        promptAction({
+          title: '修改链接展示名称',
+          label: '前台显示的链接名称',
+          value: link.displayName,
+          callback: async (value) => {
+            try {
+              await adminApi(`/api/admin/links/${link.id}`, { method: 'PATCH', body: { displayName: value } });
+              await refreshFileProject();
+              adminToast('链接名称已更新', 'success');
+            } catch (error) {
+              adminToast(error.message || '链接名称更新失败', 'error');
+            }
+          }
+        });
+      }
+      if (action === 'url') {
+        promptAction({
+          title: '修改跳转地址',
+          label: '完整的 HTTP / HTTPS 链接',
+          value: link.url,
+          maxLength: 2000,
+          callback: async (value) => {
+            try {
+              await adminApi(`/api/admin/links/${link.id}`, { method: 'PATCH', body: { url: value } });
+              await refreshFileProject();
+              adminToast('跳转地址已更新', 'success');
+            } catch (error) {
+              adminToast(error.message || '跳转地址更新失败', 'error');
+            }
+          }
+        });
+      }
+      if (action === 'delete') {
+        confirmAction({
+          title: '删除跳转链接',
+          text: `确定删除“${link.displayName}”吗？访客端入口会立即失效。`,
+          callback: async () => {
+            try {
+              await adminApi(`/api/admin/links/${link.id}`, { method: 'DELETE' });
+              await refreshFileProject();
+              adminToast('跳转链接已删除', 'success');
+            } catch (error) {
+              adminToast(error.message || '链接删除失败', 'error');
+            }
+          }
+        });
+      }
+      return;
+    }
     const button = event.target.closest('[data-file-action]');
     if (!button || !state.fileProject) return;
     const file = state.fileProject.files.find((item) => item.id === Number(button.dataset.fileId));
@@ -1372,6 +1500,25 @@ function bindFileManagerEvents() {
       });
     }
   });
+}
+
+function updateFileUploadMode() {
+  const form = byId('fileUploadForm');
+  const isLink = form.elements.type.value === 'link';
+  byId('fileUploadInputField').hidden = isLink;
+  byId('fileUploadLinkField').hidden = !isLink;
+  byId('fileUploadLimits').hidden = isLink;
+  byId('fileUploadLinkHint').hidden = !isLink;
+  form.elements.file.required = !isLink;
+  form.elements.linkUrl.required = isLink;
+  form.elements.displayName.required = isLink;
+  form.elements.displayName.placeholder = isLink
+    ? '例如：在线演示、购买页面、项目官网'
+    : '不填则使用原文件名';
+  const label = form.querySelector('.button-label');
+  const loading = form.querySelector('.button-loading');
+  if (label) label.textContent = isLink ? '添加链接' : '上传文件';
+  if (loading) loading.textContent = isLink ? '正在添加...' : '上传中...';
 }
 
 function replaceProjectFile(file) {

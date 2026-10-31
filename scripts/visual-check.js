@@ -6,6 +6,8 @@ import { chromium } from 'playwright-core';
 const ROOT_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUTPUT_DIR = path.join(ROOT_DIR, 'test-output');
 const BASE_URL = (process.env.TEST_BASE_URL || process.argv[2] || 'http://127.0.0.1:18931').replace(/\/$/, '');
+const ADMIN_USERNAME = process.env.TEST_ADMIN_USERNAME || process.argv[3] || 'admin';
+const ADMIN_PASSWORD = process.env.TEST_ADMIN_PASSWORD || process.argv[4] || 'FushiVIP@2026';
 const EDGE_PATH = process.env.EDGE_PATH || 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
 
 await fs.mkdir(OUTPUT_DIR, { recursive: true });
@@ -70,8 +72,8 @@ try {
 
   const adminLogin = await desktop.context.request.post(`${BASE_URL}/api/admin/auth/login`, {
     data: {
-      username: process.env.TEST_ADMIN_USERNAME || 'admin',
-      password: process.env.TEST_ADMIN_PASSWORD || 'FushiVIP@2026'
+      username: ADMIN_USERNAME,
+      password: ADMIN_PASSWORD
     }
   });
   if (!adminLogin.ok()) throw new Error(`实时推送测试登录失败：${adminLogin.status()}`);
@@ -131,7 +133,17 @@ try {
   const cardCount = await desktop.page.locator('.project-card:not(.skeleton-card)').count();
   if (cardCount < 1) throw new Error(`访客端项目卡片数量异常：${cardCount}`);
 
-  await desktop.page.locator('[data-open-project]').first().click();
+  const downloadableProjectId = await desktop.page.locator('.project-card:not(.skeleton-card)').evaluateAll((cards) => {
+    for (const card of cards) {
+      const documentStat = card.querySelectorAll('.card-file-stats span')[1]?.textContent || '';
+      if (Number.parseInt(documentStat, 10) > 0) {
+        return Number(card.querySelector('[data-open-project]')?.dataset.openProject || 0);
+      }
+    }
+    return 0;
+  });
+  if (!downloadableProjectId) throw new Error('没有可下载资料的项目，无法执行下载验收');
+  await desktop.page.locator(`[data-open-project="${downloadableProjectId}"]`).click();
   await desktop.page.locator('#projectDialog[open]').waitFor();
   const dialogScroll = await desktop.page.locator('#projectDialog .dialog-scroll').evaluate((element) => ({
     scrollbarWidth: getComputedStyle(element).scrollbarWidth,
@@ -164,8 +176,8 @@ try {
   await admin.page.goto(`${BASE_URL}/admin/`, { waitUntil: 'domcontentloaded' });
   await admin.page.locator('#loginScreen:not([hidden])').waitFor();
   await admin.page.screenshot({ path: path.join(OUTPUT_DIR, 'admin-login.png') });
-  await admin.page.locator('#loginForm input[name="username"]').fill(process.env.TEST_ADMIN_USERNAME || 'admin');
-  await admin.page.locator('#loginForm input[name="password"]').fill(process.env.TEST_ADMIN_PASSWORD || 'FushiVIP@2026');
+  await admin.page.locator('#loginForm input[name="username"]').fill(ADMIN_USERNAME);
+  await admin.page.locator('#loginForm input[name="password"]').fill(ADMIN_PASSWORD);
   await admin.page.locator('#loginForm button[type="submit"]').click();
   await admin.page.locator('#adminApp:not([hidden])').waitFor();
   await admin.page.locator('.welcome-strip').waitFor();
@@ -199,6 +211,31 @@ try {
   const savedProject = await saveResponse.json();
   await admin.page.locator('#projectEditorDialog').waitFor({ state: 'hidden' });
   await admin.page.locator(`text=${uniqueProjectName}`).first().waitFor();
+  await admin.page.locator(`[data-project-action="files"][data-project-id="${savedProject.data.id}"]`).click();
+  await admin.page.locator('#fileManagerDialog[open]').waitFor();
+  await admin.page.locator('#fileUploadForm [name="type"]').selectOption('link');
+  await admin.page.locator('#fileUploadForm [name="displayName"]').fill('项目官网演示');
+  await admin.page.locator('#fileUploadForm [name="linkUrl"]').fill('https://example.com/project-demo');
+  const linkSavePromise = admin.page.waitForResponse(
+    (response) => response.url().endsWith(`/api/admin/projects/${savedProject.data.id}/links`)
+      && response.request().method() === 'POST'
+  );
+  await admin.page.locator('#fileUploadForm button[type="submit"]').click();
+  const linkSaveResponse = await linkSavePromise;
+  if (!linkSaveResponse.ok()) throw new Error(`项目链接保存失败：${linkSaveResponse.status()}`);
+  await admin.page.locator('[data-link-row]').filter({ hasText: '项目官网演示' }).waitFor();
+  await admin.page.screenshot({ path: path.join(OUTPUT_DIR, 'admin-project-links.png') });
+  await admin.page.locator('[data-close-dialog="fileManagerDialog"]').first().click();
+  const linkPage = await admin.context.newPage();
+  await linkPage.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+  await linkPage.locator(`[data-open-project="${savedProject.data.id}"]`).click();
+  await linkPage.locator('#projectDialog[open]').waitFor();
+  const publicLink = linkPage.locator('.file-download[href="https://example.com/project-demo"]');
+  await publicLink.waitFor();
+  if (await publicLink.getAttribute('target') !== '_blank') {
+    throw new Error('前台外部链接未设置为新页面打开');
+  }
+  await linkPage.close();
   await admin.context.request.delete(`${BASE_URL}/api/admin/projects/${savedProject.data.id}`);
 
   await admin.page.locator('[data-view="categories"]').click();

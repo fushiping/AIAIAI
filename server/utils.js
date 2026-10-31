@@ -60,6 +60,17 @@ export function fileMeta(row) {
   };
 }
 
+export function linkMeta(row) {
+  return {
+    id: row.id,
+    displayName: row.display_name,
+    url: row.url,
+    sortOrder: row.sort_order,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at
+  };
+}
+
 export function projectMeta(row, includeFiles = false) {
   const result = {
     id: row.id,
@@ -76,13 +87,18 @@ export function projectMeta(row, includeFiles = false) {
     createdAt: row.created_at,
     updatedAt: row.updated_at,
     softwareCount: Number(row.software_count || 0),
-    documentCount: Number(row.document_count || 0)
+    documentCount: Number(row.document_count || 0),
+    linkCount: Number(row.link_count || 0)
   };
   if (includeFiles) {
     result.files = all(
       'SELECT * FROM project_files WHERE project_id = ? ORDER BY type DESC, id ASC',
       [row.id]
     ).map(fileMeta);
+    result.links = all(
+      'SELECT * FROM project_links WHERE project_id = ? ORDER BY sort_order ASC, id ASC',
+      [row.id]
+    ).map(linkMeta);
   }
   return result;
 }
@@ -91,7 +107,8 @@ export function projectSelect(extraColumns = '') {
   return `
     SELECT p.*, c.name AS category_name,
       (SELECT COUNT(*) FROM project_files f WHERE f.project_id = p.id AND f.type = 'software') AS software_count,
-      (SELECT COUNT(*) FROM project_files f WHERE f.project_id = p.id AND f.type = 'document') AS document_count
+      (SELECT COUNT(*) FROM project_files f WHERE f.project_id = p.id AND f.type = 'document') AS document_count,
+      (SELECT COUNT(*) FROM project_links l WHERE l.project_id = p.id) AS link_count
       ${extraColumns ? `, ${extraColumns}` : ''}
     FROM projects p
     LEFT JOIN categories c ON c.id = p.category_id

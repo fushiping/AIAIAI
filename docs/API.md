@@ -162,6 +162,7 @@ data: {"reason":"settings-updated","at":"2026-10-31T13:00:00.000Z"}
 | `POST` | `/api/admin/upload/cover` | 上传 JPG/PNG/WEBP 项目封面 |
 | `POST` | `/api/admin/upload/widget-image` | 上传悬浮联系二维码或管理员标识，需要 `settings` 权限 |
 | `POST` | `/api/admin/projects/:projectId/files` | 上传软件或资料文件 |
+| `POST` | `/api/admin/projects/:projectId/links` | 新增 HTTP/HTTPS 外部跳转链接 |
 
 项目字段示例：
 
@@ -198,6 +199,18 @@ data: {"reason":"settings-updated","at":"2026-10-31T13:00:00.000Z"}
 | `type` | `software` 软件包或 `document` 资料 |
 | `displayName` | 前台展示名称，可选 |
 
+新增项目外部链接：
+
+```json
+{
+  "displayName": "项目在线演示",
+  "url": "https://example.com/project-demo",
+  "sortOrder": 0
+}
+```
+
+链接仅允许公开的 HTTP/HTTPS 地址。访客在项目详情中点击后会在新页面打开。
+
 ## 文件编辑
 
 | 方法 | 路径 | 权限 | 说明 |
@@ -206,6 +219,8 @@ data: {"reason":"settings-updated","at":"2026-10-31T13:00:00.000Z"}
 | `PUT` | `/api/admin/files/:id/replace` | `projects` | 替换文件本体 |
 | `DELETE` | `/api/admin/files/:id` | `projects` | 删除文件 |
 | `GET` | `/api/admin/files/:id/download` | `projects` | 管理员检查文件 |
+| `PATCH` | `/api/admin/links/:id` | `projects` | 修改链接名称、地址或排序 |
+| `DELETE` | `/api/admin/links/:id` | `projects` | 删除外部跳转链接 |
 
 文件扩展名白名单：PDF、DOC/DOCX、XLS/XLSX、PPT/PPTX、TXT/MD/CSV、ZIP/RAR/7Z、EXE/MSI/DMG/PKG。
 

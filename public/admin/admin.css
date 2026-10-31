@@ -2956,6 +2956,11 @@ svg {
   stroke-width: 1.4;
 }
 
+.admin-file-icon.link {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
 .admin-file-main strong {
   overflow: hidden;
   display: block;
@@ -2969,6 +2974,9 @@ svg {
 .admin-file-main span {
   color: var(--slate-400);
   font-size: 7px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .type-pill.software {
@@ -2979,6 +2987,11 @@ svg {
 .type-pill.document {
   background: var(--gold-100);
   color: var(--gold-500);
+}
+
+.type-pill.link {
+  background: var(--blue-soft);
+  color: var(--blue);
 }
 
 .file-row-actions {
