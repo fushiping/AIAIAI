@@ -50,3 +50,14 @@ export function broadcastSiteUpdate(reason = 'content') {
     }
   }
 }
+
+export function closeSiteUpdateConnections() {
+  for (const client of clients) {
+    try {
+      client.res.end();
+    } catch {
+      // 已断开的连接无需再次处理。
+    }
+  }
+  clients.clear();
+}

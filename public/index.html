@@ -8,7 +8,7 @@
   <meta name="description" content="傅先生AI项目VIP，精选可落地、可合作、可持续迭代的AI项目与数字化解决方案。">
   <title>傅先生AI项目VIP｜AI项目合作与项目资源平台</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/styles.css?v=20261101-perf1">
+  <link rel="stylesheet" href="assets/styles.css?v=20261103-design1">
 </head>
 <body>
   <div id="initialSiteData" data-payload="__INITIAL_SITE_DATA__" hidden></div>
@@ -152,10 +152,16 @@
         </div>
 
         <div class="category-block" id="categories">
-          <div class="category-bar" id="categoryFilter" role="group" aria-label="按项目分类筛选">
-            <button class="category-button active" type="button" data-category="all">
-              <span data-content-key="projects.allFilter">全部项目</span><b id="allProjectCount">0</b>
-            </button>
+          <div class="category-toolbar">
+            <div class="category-bar" id="categoryFilter" role="group" aria-label="按项目分类筛选">
+              <button class="category-button active" type="button" data-category="all">
+                <span data-content-key="projects.allFilter">全部项目</span><b id="allProjectCount">0</b>
+              </button>
+            </div>
+            <div class="project-result-count" role="status" aria-live="polite" aria-atomic="true">
+              <i aria-hidden="true"></i>
+              <span><span data-content-key="projects.resultLead">当前展示</span> <strong id="projectResultCount">0</strong> <span data-content-key="projects.resultUnit">个可合作项目</span></span>
+            </div>
           </div>
           <p class="category-description" id="categoryDescription" data-content-key="projects.defaultCategoryDesc">全部项目均经过信息统一整理，支持在线查看、资料下载与合作咨询。</p>
         </div>
@@ -516,6 +522,6 @@
 
   <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
 
-  <script type="module" src="assets/app.js?v=20261101-perf1"></script>
+  <script type="module" src="assets/app.js?v=20261103-design1"></script>
 </body>
 </html>

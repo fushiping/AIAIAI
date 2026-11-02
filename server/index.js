@@ -9,6 +9,7 @@ import publicRoutes from './routes/public.js';
 import adminRoutes from './routes/admin.js';
 import { seedDatabase } from './seed.js';
 import { getInitialSiteData } from './services/site-data.js';
+import { closeSiteUpdateConnections } from './services/events.js';
 
 seedDatabase();
 
@@ -175,6 +176,8 @@ const server = app.listen(PORT, '0.0.0.0', () => {
 
 function shutdown(signal) {
   console.log(`收到 ${signal}，正在关闭服务...`);
+  // SSE 是长连接，必须先主动结束，否则 server.close 会一直等待而拖慢重启。
+  closeSiteUpdateConnections();
   server.close(() => {
     db.close();
     process.exit(0);

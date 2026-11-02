@@ -63,6 +63,12 @@ export const UI_TEXT_SCHEMA = [
       field('projects.documentUnit', '资料数量单位', { max: 20 }),
       field('projects.linkUnit', '链接数量单位', { max: 20 }),
       field('projects.cardPrefix', '卡片英文前缀', { max: 30 }),
+      field('projects.resultLead', '筛选结果前缀', { max: 40 }),
+      field('projects.resultUnit', '筛选结果单位', { max: 40 }),
+      field('projects.sparseKicker', '单项目引导眉题', { max: 50 }),
+      field('projects.sparseTitle', '单项目时引导标题', { max: 80 }),
+      field('projects.sparseDesc', '单项目时引导说明', { type: 'textarea', max: 240 }),
+      field('projects.sparseAction', '单项目时咨询按钮', { max: 40 }),
       field('projects.emptyTitle', '无项目标题', { max: 100 }),
       field('projects.emptyDesc', '无项目说明', { type: 'textarea', max: 300 })
     ]
@@ -249,6 +255,12 @@ export const UI_TEXT_DEFAULTS = Object.freeze({
   'projects.documentUnit': '资料',
   'projects.linkUnit': '链接',
   'projects.cardPrefix': 'PROJECT',
+  'projects.resultLead': '当前展示',
+  'projects.resultUnit': '个可合作项目',
+  'projects.sparseKicker': 'PROJECT ADVISORY',
+  'projects.sparseTitle': '没有完全匹配的方案？',
+  'projects.sparseDesc': '告诉我们你的业务目标，我们会结合现有项目给出更合适的合作建议。',
+  'projects.sparseAction': '提交项目需求',
   'projects.emptyTitle': '这个分类暂时没有上架项目',
   'projects.emptyDesc': '可以切换其他分类，或直接提交合作需求了解可对接的项目方向。',
 

@@ -155,9 +155,15 @@ async function applySiteData(data) {
     state.projects = data.projects || [];
     state.metrics = data.metrics || {};
     state.featuredImageData = data.featuredImageData || '';
+    const activeCount = state.projects.filter(
+      (project) => String(project.categoryId) === String(state.activeCategory)
+    ).length;
     if (
       state.activeCategory !== 'all'
-      && !state.categories.some((category) => String(category.id) === String(state.activeCategory))
+      && (
+        !state.categories.some((category) => String(category.id) === String(state.activeCategory))
+        || activeCount === 0
+      )
     ) {
       state.activeCategory = 'all';
     }
@@ -388,13 +394,16 @@ function renderCategories() {
     `<button class="category-button ${state.activeCategory === 'all' ? 'active' : ''}" type="button" data-category="all">
       <span>${escapeHtml(uiText('projects.allFilter'))}</span><b>${state.projects.length}</b>
     </button>`,
-    ...state.categories.map((category) => `
+    ...state.categories.filter((category) => (counts.get(category.id) || 0) > 0).map((category) => `
       <button class="category-button ${String(state.activeCategory) === String(category.id) ? 'active' : ''}" type="button" data-category="${category.id}">
         <span>${escapeHtml(category.name)}</span><b>${counts.get(category.id) || 0}</b>
       </button>
     `)
   ];
   container.innerHTML = buttons.join('');
+  container.querySelectorAll('.category-button').forEach((button) => {
+    button.setAttribute('aria-pressed', String(button.classList.contains('active')));
+  });
   setText('allProjectCount', state.projects.length);
 }
 
@@ -406,6 +415,8 @@ function renderProjects() {
     : state.projects.filter((project) => String(project.categoryId) === String(state.activeCategory));
 
   const category = state.categories.find((item) => String(item.id) === String(state.activeCategory));
+  setText('projectResultCount', filtered.length);
+  grid.dataset.count = String(filtered.length);
   setText(
     'categoryDescription',
     category?.description || uiText('projects.defaultCategoryDesc')
@@ -424,10 +435,10 @@ function renderProjects() {
     return;
   }
 
-  grid.innerHTML = filtered.map((project, index) => {
+  const projectCards = filtered.map((project, index) => {
     const tags = (project.tags || []).slice(0, 3).map((tag) => `<span>${escapeHtml(tag)}</span>`).join('');
     return `
-      <article class="project-card" data-project-card="${project.id}">
+      <article class="project-card" data-project-card="${project.id}" style="--card-order:${index}">
         <div class="card-cover">
           <img src="${escapeHtml(project.cardImageData || safeCover(project.coverCardUrl || project.coverUrl))}" alt="${escapeHtml(project.name)} 项目封面" width="720" height="405" loading="${index < 2 ? 'eager' : 'lazy'}" fetchpriority="${index === 0 ? 'high' : 'auto'}" decoding="async">
           <span class="card-category">${escapeHtml(project.categoryName)}</span>
@@ -464,6 +475,18 @@ function renderProjects() {
       </article>
     `;
   }).join('');
+  const sparseCard = filtered.length === 1 ? `
+    <aside class="project-sparse-card">
+      <span class="project-sparse-kicker">${escapeHtml(uiText('projects.sparseKicker'))}</span>
+      <h3>${escapeHtml(uiText('projects.sparseTitle'))}</h3>
+      <p>${escapeHtml(uiText('projects.sparseDesc'))}</p>
+      <a href="#contact" class="project-sparse-action">
+        <span>${escapeHtml(uiText('projects.sparseAction'))}</span>
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4"/></svg>
+      </a>
+    </aside>
+  ` : '';
+  grid.innerHTML = projectCards + sparseCard;
 }
 
 async function openProject(projectId) {
