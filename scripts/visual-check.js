@@ -169,6 +169,27 @@ try {
   if (dialogScroll.scrollbarWidth !== 'none' || !dialogScroll.scrollable) {
     throw new Error(`项目详情滚动区域检查失败：${JSON.stringify(dialogScroll)}`);
   }
+  await desktop.page.waitForFunction(
+    () => document.querySelector('#detailCover')?.naturalWidth > 0
+  );
+  const coverLayout = await desktop.page.locator('#detailCover').evaluate((image) => {
+    const container = image.closest('.detail-cover').getBoundingClientRect();
+    const scale = Math.min(container.width / image.naturalWidth, container.height / image.naturalHeight);
+    return {
+      objectFit: getComputedStyle(image).objectFit,
+      containerWidth: container.width,
+      containerHeight: container.height,
+      paintedWidth: image.naturalWidth * scale,
+      paintedHeight: image.naturalHeight * scale
+    };
+  });
+  if (
+    coverLayout.objectFit !== 'contain'
+    || coverLayout.paintedWidth > coverLayout.containerWidth + 1
+    || coverLayout.paintedHeight > coverLayout.containerHeight + 1
+  ) {
+    throw new Error(`项目详情封面未完整展示：${JSON.stringify(coverLayout)}`);
+  }
   await desktop.page.screenshot({ path: path.join(OUTPUT_DIR, 'public-project-detail.png') });
   if (linkedProjectId) {
     const externalLinks = await desktop.page.locator('#detailFileList .file-download[target="_blank"]').count();
