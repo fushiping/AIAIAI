@@ -292,10 +292,13 @@ function renderFeaturedProject() {
   if (!container) return;
   container.onclick = null;
   container.onkeydown = null;
+  container.removeAttribute('role');
+  container.removeAttribute('tabindex');
+  container.removeAttribute('aria-label');
   if (!project) {
     container.innerHTML = `
-      <div class="panel-topline"><span>${escapeHtml(uiText('hero.featuredLabel'))}</span><span class="live-state"><i></i> ${escapeHtml(uiText('hero.featuredStatus'))}</span></div>
-      <div class="panel-project-info" style="padding:55px 18px 38px">
+      <div class="panel-topline"><span>${escapeHtml(uiText('hero.featuredLabel'))}</span><span class="live-state"><i aria-hidden="true"></i> ${escapeHtml(uiText('hero.featuredStatus'))}</span></div>
+      <div class="panel-project-info panel-empty-state">
         <span class="panel-category">${escapeHtml(uiText('hero.featuredCategory'))}</span>
         <h2>${escapeHtml(uiText('hero.featuredLoadingTitle'))}</h2>
         <p>${escapeHtml(uiText('hero.featuredLoadingDesc'))}</p>
@@ -304,10 +307,20 @@ function renderFeaturedProject() {
     container.onclick = () => scrollToSection('contact');
     return;
   }
+  const resources = [
+    [project.softwareCount, uiText('projects.softwareUnit')],
+    [project.documentCount, uiText('projects.documentUnit')],
+    [project.linkCount, uiText('projects.linkUnit')]
+  ].filter(([count]) => Number(count) > 0);
+  const resourceMarkup = resources.length
+    ? `<div class="panel-resource-meta" role="group" aria-label="项目可用资源">${resources.map(([count, label]) => `
+        <span><b>${escapeHtml(count)}</b>${escapeHtml(label)}</span>
+      `).join('')}</div>`
+    : '';
   container.innerHTML = `
     <div class="panel-topline">
       <span>${escapeHtml(uiText('hero.featuredLabel'))}</span>
-      <span class="live-state"><i></i> ${escapeHtml(uiText('hero.featuredStatus'))}</span>
+      <span class="live-state"><i aria-hidden="true"></i> ${escapeHtml(uiText('hero.featuredStatus'))}</span>
     </div>
     <div class="panel-cover">
       <img src="${escapeHtml(state.featuredImageData || safeCover(project.coverMediumUrl || project.coverUrl))}" alt="${escapeHtml(project.name)} 项目封面" width="1600" height="900" loading="eager" fetchpriority="high" decoding="async">
@@ -316,6 +329,7 @@ function renderFeaturedProject() {
       <span class="panel-category">${escapeHtml(project.categoryName)}</span>
       <h2>${escapeHtml(project.name)}</h2>
       <p>${escapeHtml(project.slogan)}</p>
+      ${resourceMarkup}
     </div>
     <div class="panel-footer">
       <span>${escapeHtml(uiText('hero.featuredFooter'))}</span>
